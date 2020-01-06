@@ -1,0 +1,506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="version" content="S5 1.1" />
+  <meta name="author" content="Jack Blundell (Stanford)" />
+  <title>Lecture 1: Introduction to Stata</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!-- configuration parameters -->
+  <meta name="defaultView" content="slideshow" />
+  <meta name="controlVis" content="hidden" />
+  <!-- style sheet links -->
+  <link rel="stylesheet" href="/Users/jack/Library/Application Support/Stata/ado/plus/m/s5/santiago/slides.css" type="text/css" media="projection" id="slideProj" />
+  <link rel="stylesheet" href="/Users/jack/Library/Application Support/Stata/ado/plus/m/s5/santiago/outline.css" type="text/css" media="screen" id="outlineStyle" />
+  <link rel="stylesheet" href="/Users/jack/Library/Application Support/Stata/ado/plus/m/s5/santiago/print.css" type="text/css" media="print" id="slidePrint" />
+  <link rel="stylesheet" href="/Users/jack/Library/Application Support/Stata/ado/plus/m/s5/santiago/opera.css" type="text/css" media="projection" id="operaFix" />
+  <!-- S5 JS -->
+  <script src="/Users/jack/Library/Application Support/Stata/ado/plus/m/s5/santiago/slides.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="layout">
+<div id="controls"></div>
+<div id="currentSlide"></div>
+<div id="header"></div>
+<div id="footer">
+  <h1>PUBLPOL 330D Applied Econometrics for Public Policy, Winter 2019</h1>
+  <h2>Lecture 1: Introduction to Stata</h2>
+</div>
+</div>
+<div class="presentation">
+<div class="title-slide slide">
+  <h1 class="title">Lecture 1: Introduction to Stata</h1>
+  <h3 class="author">Jack Blundell (Stanford)</h3>
+  <h4 class="date">PUBLPOL 330D Applied Econometrics for Public Policy, Winter 2019</h4>
+</div>
+<div id="introduction" class="slide section level1">
+<h1>1. Introduction</h1>
+<p>In this class we will learn the basics of Stata. We will first go through some preliminaries, then launch into a simple worked example demonstrating how to:</p>
+<ol style="list-style-type: decimal">
+<li>Load data into Stata</li>
+<li>Perform basic data-cleaning commands</li>
+<li>Generate plots</li>
+<li>Test for a difference in means between groups</li>
+<li>Save your output in a convenient format</li>
+</ol>
+</div>
+<div id="getting-started-with-stata" class="slide section level1">
+<h1>2. Getting started with Stata</h1>
+<p>Stata is a statistical package which is:</p>
+<ul>
+<li><p>Highly optimized for common econometric methods, both in syntax and computation</p></li>
+<li><p>Easy to use</p></li>
+<li><p>Well-supported by an active user base</p></li>
+<li><p>Commonly installed in secure data labs</p></li>
+</ul>
+</div>
+<div id="section" class="slide section level1">
+<h1></h1>
+<p>Stata is not:</p>
+<ul>
+<li><p>As flexible as R and Python (Good luck applying machine learning in Stata!…)</p></li>
+<li><p>As widely used in the private sector as it is in academia and think tanks</p></li>
+</ul>
+<p>While R and Python are also valuable to learn, Stata remains the most-common programming language in empirical economics and is an excellent tool for learning and applying econometric methods. The majority of papers in applied economics include analysis using Stata and the majority of applied economists are comfortable using it.</p>
+</div>
+<div id="the-stata-interface" class="slide section level1">
+<h1>2.1 The Stata Interface</h1>
+<p>The Stata Interface consists of the following windows:</p>
+<div class="figure">
+<img src="StataInterface.png" style="width:100.0%" alt="" />
+<p class="caption">Stata Interface (source: https://tutorials.iq.harvard.edu/Stata/StataIntro/StataIntro.html)</p>
+</div>
+</div>
+<div id="section-1" class="slide section level1">
+<h1></h1>
+<p>The roles of each element are:</p>
+<ul>
+<li><p>The <strong>command window</strong> is where you can type in commands instructing Stata to perform calculations</p></li>
+<li><p>The <strong>results window</strong> shows the output from any commands you run</p></li>
+<li><p>The <strong>review window</strong> gives previous commands. This lets you keep track of what you’ve asked Stata to do.</p></li>
+<li><p>The <strong>variables window</strong> gives information about variables. Note that each variable has a name and a label, along with some other properties</p></li>
+<li><p>The <strong>graph window</strong> contains any graphical output</p></li>
+<li><p>The <strong>do-file editor</strong> allows you to edit .do files, which is what Stata scripts are called. .do files contain commands which can then be run in batches.</p></li>
+</ul>
+</div>
+<div id="running-code-in-stata" class="slide section level1">
+<h1>2.2 Running code in Stata</h1>
+<p>There are two ways to run code in stata:</p>
+<ul>
+<li><p>Typing directly into the command window then pressing enter</p></li>
+<li><p>Writing then running a .do file</p></li>
+</ul>
+<p>While the first option is easy for one-off commands, as you become familiar with the software it is best to use .do files. .do files are opened in the do-file editor, which can be opened through File -&gt; New. They are run either by clicking ‘do’ or by pressing CMD+SHIFT+d (OSX) or CTRL+d (Windows).</p>
+</div>
+<div id="finding-help" class="slide section level1">
+<h1>2.3 Finding help</h1>
+<p>Perhaps the most important Stata command to know is <code>help</code>, which brings up Stata documentation. For example, typing <code>help regress</code> into the command window then hitting enter will bring up all documentation on the <code>regress</code> command in stata:</p>
+<div class="figure">
+<img src="helpregress.png" style="width:100.0%" alt="" />
+<p class="caption">Stata help</p>
+</div>
+<p>See the end of these notes for further resources.</p>
+</div>
+<div id="worked-example-lalonde-1986" class="slide section level1">
+<h1>3. Worked example: Lalonde (1986)</h1>
+</div>
+<div id="building-a-.do-file" class="slide section level1">
+<h1>3.1 Building a .do file</h1>
+<p>Our application will be a classic paper in Labor economics (<em>LaLonde, Robert J. “Evaluating the Econometric Evaluations of Training Programs with Experimental Data.” The American Economic Review, 1986</em>). In this paper, LaLonde investigates the impact of a randomized employment program on earnings. The data is provided in <code>lalonde_experimental.txt</code>.</p>
+<p>We can now start looking at an example .do file. A typical project consists of several (often several dozen) .do files each with hundreds of lines of code which are interlinked, but here we will just work from a single file.</p>
+</div>
+<div id="section-2" class="slide section level1">
+<h1></h1>
+<p>A .do file should start with a title and short description. My .do file for example starts with the following:</p>
+<pre class='stata'>. /* Lecture 1
+> PUBLPOL 330D Winter 2020
+> Jack Blundell 
+> */
+</pre>
+<pre class='stata'>. /*
+> Worked example of analysis of lalonde 1986 data.
+> Structure:
+> 0. Setup
+> 1. Import raw data
+> 2. Clean data
+> 3. Explore data
+> 4. Test for differences in means by group 
+> */    
+</pre>
+<p>The <code>/*</code> and <code>*/</code> symbols tell Stata that the enclosed text is not to be read as Stata commands, but instead provides information and context to the researcher reading the code. It is good practice when writing code to include some non-command text. These might be section titles, or small annotations describing code. Any text following <code>*</code> or <code>//</code>, or enclosed between <code>/*</code> and <code>*/</code> will not be read as a command by stata so can be used to convey this information.</p>
+</div>
+<div id="section-3" class="slide section level1">
+<h1></h1>
+<p>Here’s an example of a comment, followed by a line of code:</p>
+<pre><code>// regress earnings on treatment for adult sub-sample
+reg y t if age &gt;= 18</code></pre>
+<p>While your code might seem self-explanatory to you at first, oftentimes this is not the case for others, a grader or indeed for your future self. To avoid clutter, I exclude all comments in the code included below, but you’ll see them in the full .do file.</p>
+</div>
+<div id="section-4" class="slide section level1">
+<h1></h1>
+<p>Next up in my .do file is the following:</p>
+<pre class='stata'>. clear
+</pre>
+<pre class='stata'>. set more off
+</pre>
+<p>These two commands (<code>clear</code> and <code>set more off</code>) are standard to include at the top of .do files. They clear the system and allow Stata to print large amounts of output to the screen.</p>
+</div>
+<div id="section-5" class="slide section level1">
+<h1></h1>
+<p>Next I set the working directory. For this example, we will work in a single folder which will be our directory, though more complex projects will require further structure. This should be where your .do file is saved, and where the data file <code>lalonde_experiment.txt</code> is saved. Unless otherwise specified, any output you generate will be saved here.</p>
+<pre class='stata'>. cd "~/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 1/markdown slides"
+/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 1/markdown slides
+</pre>
+</div>
+<div id="section-6" class="slide section level1">
+<h1></h1>
+<p>The following two commands relate to log files. A log is a record of the output your code generates. While it is possible for small projects to run all your code each time and simply inspect the results in the Stata results window, for longer projects it is useful to have a record of all your output. First I close any existing log file:</p>
+<pre class='stata'>. // capture log close
+</pre>
+<p><em>Note that in this tutorial log commands are commented out using <code>//</code>. This is because the markdown with which this document is created does not function well with logs.</em></p>
+<p>The code above will close any existing log file you have open, so that a new one can be opened. The <code>capture</code> command here is useful but we will not go into detail of how it works quite yet.</p>
+</div>
+<div id="section-7" class="slide section level1">
+<h1></h1>
+<p>The next command starts a new log:</p>
+<pre class='stata'>. //log using "lecture1log", replace
+</pre>
+<p>The command tells stata to <code>log</code> (create a log file containing results) and to save the file (<code>using</code>) as <code>lecture1log</code>. Any results generated will now end up in a <code>.smcl</code> log file in the main working directory. The <code>replace</code> option which follows will crop up several times in this example attached to numerous commands. It tells Stata to overwrite any existing file as required. Excluding <code>replace</code> will result in an error message if an overwrite is attempted.</p>
+</div>
+<div id="importing-data" class="slide section level1">
+<h1>3.2 Importing data</h1>
+<p>We first inspect the data file lalonde_experimental.txt. Opening this up in a text editor we see something like:</p>
+<pre><code>    1.0000    9.9300
+    1.0000    3.5959
+    1.0000   24.9094
+    1.0000    7.5061
+    1.0000    0.2898
+    1.0000    4.0565
+    1.0000         0
+    1.0000    8.4722
+    1.0000    2.1640
+    1.0000   12.4181
+    1.0000    8.1739
+    1.0000   17.0946
+    1.0000         0
+    1.0000   18.7399
+    1.0000    3.0239</code></pre>
+</div>
+<div id="section-8" class="slide section level1">
+<h1></h1>
+<p>There are two columns, each corresponding to a variable. The first column is a binary indicator telling us whether an individual received training (1) or not (0). The second column is the earnings of each individual after training. To get this into Stata we can use Stata’s <code>import delimited</code> command. Note that the data file has to be in your current working directory for the below code to work.</p>
+<pre class='stata'>. import delimited "lalonde_experiment.txt", delimiter(" ", collapse)
+(3 vars, 446 obs)
+</pre>
+<p>We first give the command <code>import delimited</code> directed towards the file name <code>"lalonde_experiment.txt"</code>. There then follows a comma, after which we provide options as required. This is the standard structure of a Stata command. Remember you can always use <code>help</code> if unsure of the exact structure for a particular command.</p>
+</div>
+<div id="section-9" class="slide section level1">
+<h1></h1>
+<p>This particular data import is complicated by the fact that the data file we are reading from is not in a standard format. Typically, the data is divided by a delimiter such as a comma, which enables easy reading of data into various formats. Here, the data is fixed-width, so we need to add the <code>delimiter(" ", collapse)</code> option. This is a good example of why it is worth inspecting the raw data before importing it.</p>
+<ul>
+<li>Note that command <code>insheet</code> is designed to import data of this type, but is far less common than <code>import delimited</code> so I’ve opted to demonstrate the latter *</li>
+</ul>
+</div>
+<div id="section-10" class="slide section level1">
+<h1></h1>
+<p>To see what the data looks like now it is in Stata, typing the command <code>browse</code> into the command window brings up the data in a familiar spreadsheet-style format:</p>
+<div class="figure">
+<img src="browse.png" style="width:100.0%" alt="" />
+<p class="caption">The <code>browse</code> command</p>
+</div>
+</div>
+<div id="cleaning-data" class="slide section level1">
+<h1>3.3 Cleaning data</h1>
+</div>
+<div id="variable-names-labels-and-types" class="slide section level1">
+<h1>3.3.1 Variable names, labels and types</h1>
+<p>We have loaded our data, but it doesn’t look particularly tidy. For a start, there are three variables whereas the true data only has two. We can see that variable <code>v1</code> is empty, so we can go ahead and drop this:</p>
+<pre class='stata'>. drop v1
+</pre>
+<p>The remaining variables can then be renamed something more useful.</p>
+<pre class='stata'>. rename v2 t
+
+. rename v3 y
+</pre>
+<p>The training variable is named <code>t</code> for ‘treatment’, as is customary in the policy evaluation literature. The outcome variable (earnings) is named <code>y</code>. We can assign labels to give more information:</p>
+<pre class='stata'>. label variable t "Treatment"
+
+. label variable y "Earnings ($1,000's)"
+</pre>
+<p>We can take a look at our cleaned-up variable names and labels using <code>describe</code>:</p>
+<pre class='stata'>. describe
+
+Contains data
+  obs:           446                          
+ vars:             2                          
+ size:         4,460                          
+──────────────────────────────────────────────────────────────────────────────────────────────────────
+              storage   display    value
+variable name   type    format     label      variable label
+──────────────────────────────────────────────────────────────────────────────────────────────────────
+t               str6    %9s                   Treatment
+y               float   %9.0g                 Earnings ($1,000's)
+──────────────────────────────────────────────────────────────────────────────────────────────────────
+Sorted by: 
+     Note: Dataset has changed since last saved.
+</pre>
+<p>This also shows us that we have 446 observations and two variables.</p>
+</div>
+<div id="section-11" class="slide section level1">
+<h1></h1>
+<p>The output produced above however shows that we have a problem with our data. The <code>storage type</code> column tells us the format in which Stata is storing each variable. Looking at the <code>storage type</code> column, we see that <code>y</code> is a <code>float</code> and <code>t</code> is a <code>str6</code>. We know that both variables are actually numeric, and their data types should reflect this.</p>
+<p><code>float</code> is a data type used for continuous numeric data, which is appropriate for <code>y</code>. Abbreviation <code>str6</code> means that <code>t</code> has been imported as a string variable, which is a data type used for text information rather than numbers. To perform any analysis, this must first be converted to a numeric type:</p>
+<pre class='stata'>. destring t, replace force
+t: contains nonnumeric characters; replaced as byte
+(1 missing value generated)
+</pre>
+<p><code>destring</code> achieves this, converting <code>t</code> to a numeric storage type. Option <code>replace</code> tells Stata to replace the existing variable rather than creating a new one. <code>force</code> tells Stata to convert any non-numeric entrys to missing values.</p>
+</div>
+<div id="section-12" class="slide section level1">
+<h1></h1>
+<p>Lets check this has worked:</p>
+<pre class='stata'>. des
+
+Contains data
+  obs:           446                          
+ vars:             2                          
+ size:         2,230                          
+──────────────────────────────────────────────────────────────────────────────────────────────────────
+              storage   display    value
+variable name   type    format     label      variable label
+──────────────────────────────────────────────────────────────────────────────────────────────────────
+t               byte    %10.0g                Treatment
+y               float   %9.0g                 Earnings ($1,000's)
+──────────────────────────────────────────────────────────────────────────────────────────────────────
+Sorted by: 
+     Note: Dataset has changed since last saved.
+</pre>
+<p>We can see that both variables are now stored as numbers. <code>t</code> is now a <code>byte</code>, which is an integer data type.</p>
+</div>
+<div id="section-13" class="slide section level1">
+<h1></h1>
+<p>You may have noticed that rather than typing <code>describe</code>, the above code snippet achieves the same outcome with <code>des</code>. This is a feature of Stata. Commands (and variables) can be abbreviated. In the rest of the code below, I will use full command names when first using a command, then follow standard abbreviations if the command comes up again.</p>
+</div>
+<div id="missing-data" class="slide section level1">
+<h1>3.3.2 Missing data</h1>
+<p>A crucial part of cleaning data is investigating missingness. Here I generate a new variable using <code>generate</code> which tells us whether an individual is missing data on outcome variable <code>y</code>.</p>
+<pre class='stata'>. generate missing_y = 0
+
+. replace missing_y = 1 if y == .
+(1 real change made)
+</pre>
+<p>The first line of the above generates a variable which equals 0 for all observations. The second line is more complex. It is our first <code>if</code> statement. With this command we are telling Stata to replace the variable <code>missing_y</code> with the value 1 if variable <code>y</code> is missing for that individual. Stata requires two <code>=</code> signs for tests of equality. In Stata, missing data for numeric variables is coded as ‘.’.</p>
+</div>
+<div id="section-14" class="slide section level1">
+<h1></h1>
+<p>We can now use <code>tabulate</code> to check how many individuals are missing <code>y</code>:</p>
+<pre class='stata'>. tabulate missing_y
+
+  missing_y │      Freq.     Percent        Cum.
+────────────┼───────────────────────────────────
+          0 │        445       99.78       99.78
+          1 │          1        0.22      100.00
+────────────┼───────────────────────────────────
+      Total │        446      100.00
+</pre>
+<p>We see that there is only one observation missing y. Inspection of the original data reveals this to simply be a trailing row in the data set. We can drop this observation using the following command:</p>
+<pre class='stata'>. drop if missing_y == 1
+(1 observation deleted)
+</pre>
+<p>Repeated the above exercise for <code>t</code> shows that there are no further missing values for that variable.</p>
+</div>
+<div id="saving-a-cleaned-dataset" class="slide section level1">
+<h1>3.3.3 Saving a cleaned dataset</h1>
+<p>With that basic data cleaning complete, we now save a cleaned version. This allows us to perform analysis without having to go through all the previous steps again. Data-cleaning code can often take a very long time to run, so its useful to “check-in” your dataset after cleaning.</p>
+<pre class='stata'>. save "lalonde_clean.dta", replace
+file lalonde_clean.dta saved
+</pre>
+<p>Note that the dataset is saved as a ‘.dta’, Stata’s data file type. This type of file can be quickly read into Stata, with all variable names, labels and types maintained. The cleaned data will be saved into the current working directory.</p>
+</div>
+<div id="exploring-data" class="slide section level1">
+<h1>3.4 Exploring data</h1>
+<p>We start by loading the cleaned dataset:</p>
+<pre class='stata'>. use "lalonde_clean.dta", clear
+</pre>
+<p>Stata command <code>summarize</code> is very useful for giving basic information about numerical variables:</p>
+<pre class='stata'>. summarize y
+
+    Variable │        Obs        Mean    Std. Dev.       Min        Max
+─────────────┼─────────────────────────────────────────────────────────
+           y │        445    5.300762     6.63149          0    60.3079
+</pre>
+<p>We can see that mean earnings are $5,300.</p>
+</div>
+<div id="section-15" class="slide section level1">
+<h1></h1>
+<p>More detail can be requested by adding the <code>detail</code> option:</p>
+<pre class='stata'>. sum y, detail
+
+                     Earnings ($1,000's)
+─────────────────────────────────────────────────────────────
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs                 445
+25%            0              0       Sum of Wgt.         445
+
+50%       3.7018                      Mean           5.300762
+                        Largest       Std. Dev.       6.63149
+75%       8.1247        34.0993
+90%       12.804        36.6469       Variance       43.97666
+95%      16.9882        39.4835       Skewness       2.622092
+99%      26.8176        60.3079       Kurtosis       16.09979
+</pre>
+<p>Clear from the percentiles provided by the detailed summary is that there are a large number of individuals with zero earnings. The 25th percentile is 0, so more than a quarter of individuals have no earnings.</p>
+</div>
+<div id="section-16" class="slide section level1">
+<h1></h1>
+<p>For categorical variables such as <code>t</code>, <code>tabulate</code> can be used to give counts and shares:</p>
+<pre class='stata'>. tab t
+
+  Treatment │      Freq.     Percent        Cum.
+────────────┼───────────────────────────────────
+          0 │        260       58.43       58.43
+          1 │        185       41.57      100.00
+────────────┼───────────────────────────────────
+      Total │        445      100.00
+</pre>
+<p>We see that there are 260 individuals in the treatment group (<code>t=1</code>) and 185 in the control group (<code>t=0</code>).</p>
+</div>
+<div id="plotting-data" class="slide section level1">
+<h1>3.5 Plotting data</h1>
+<p>With continuous data, it is usually a good idea to inspect a histogram before performing analysis. This can reveal any anomalies in the data and helps guide the choice of model.</p>
+<p>The first line of the code below generates a histogram. The <code>width(1)</code> option specifies that each ‘bin’ is of width 1. The second line exports the graph as a .png image of width 500.</p>
+</div>
+<div id="section-17" class="slide section level1">
+<h1></h1>
+<pre class='stata'>. histogram y, width(1)
+(bin=61, start=0, width=1)
+
+. graph export "histogram_y.png", width(500) replace
+(file histogram_y.png written in PNG format)
+</pre>
+<p><img src="histogram_y.png" style="width:100.0%" alt="Histogram of earnings" /> # The distribution plotted here looks reasonable for earnings, given what studies have found using different datasets. There are a large number of individuals with zero earnings and a few high-earning outliers.</p>
+</div>
+<div id="do-earnings-differ-between-the-treatment-and-control-groups" class="slide section level1">
+<h1>3.6 Do earnings differ between the treatment and control groups?</h1>
+<p>Finally, we would like to test whether earnings differ between the treatment and control groups. Assuming treatment is randomly assigned, this will give us an estimate of an average effect of training on earnings.</p>
+<p>Before any formal statistical tests, we might first like to examine how earnings vary across groups. This can be achieved by <code>summarize</code> combined with an <code>if</code> statement:</p>
+<pre class='stata'>. sum y if t == 0
+
+    Variable │        Obs        Mean    Std. Dev.       Min        Max
+─────────────┼─────────────────────────────────────────────────────────
+           y │        260      4.5548    5.483835          0    39.4835
+
+. sum y if t == 1
+
+    Variable │        Obs        Mean    Std. Dev.       Min        Max
+─────────────┼─────────────────────────────────────────────────────────
+           y │        185    6.349142    7.867401          0    60.3079
+</pre>
+</div>
+<div id="section-18" class="slide section level1">
+<h1></h1>
+<p>We see that average earnings for those without treatment (<code>t=0</code>) are lower than those with treatment (<code>t=1</code>). Lets inspect this graphically by using a box plot:</p>
+<pre class='stata'>. graph box y, by(t)
+
+. graph export "boxplot_y_by_t.png", width(500) replace
+(file boxplot_y_by_t.png written in PNG format)
+</pre>
+<div class="figure">
+<img src="boxplot_y_by_t.png" style="width:70.0%" alt="" />
+<p class="caption">Earnings by treatment</p>
+</div>
+</div>
+<div id="section-19" class="slide section level1">
+<h1></h1>
+<p>It looks like earnings are higher for those who received treatment (on the right), but is this difference statistically significant? We can test this by using a t-test. To test for equality of means between the treatment and control groups, we use the <code>ttest</code> command:</p>
+<pre class='stata'>. ttest y, by(t)
+
+Two-sample t test with equal variances
+─────────┬────────────────────────────────────────────────────────────────────
+   Group │     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+─────────┼────────────────────────────────────────────────────────────────────
+       0 │     260      4.5548     .340093    5.483835    3.885101      5.2245
+       1 │     185    6.349142    .5784228    7.867401    5.207948    7.490335
+─────────┼────────────────────────────────────────────────────────────────────
+combined │     445    5.300762    .3143628     6.63149    4.682939    5.918586
+─────────┼────────────────────────────────────────────────────────────────────
+    diff │           -1.794341    .6328533               -3.038109   -.5505736
+─────────┴────────────────────────────────────────────────────────────────────
+    diff = mean(0) - mean(1)                                      t =  -2.8353
+Ho: diff = 0                                     degrees of freedom =      443
+
+    Ha: diff &lt; 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T &lt; t) = 0.0024         Pr(|T| > |t|) = 0.0048          Pr(T > t) = 0.9976
+</pre>
+<p>This command produces a large amount of information. The crucial section for us is at the bottom of the returned output. The p-value for our null hypothesis that the means of the two groups are equal is 0.0048, as given by <code>Pr(|T| &gt; |t|)</code>.</p>
+</div>
+<div id="section-20" class="slide section level1">
+<h1></h1>
+<p>Under the assumptions of the test, the patterns in the data which we see are then highly unlikely given the null hypothesis. Therefore we conclude that there is a statistically significant difference (at the 1% level) in earnings between the treatment and control groups. We estimate that the treatment increased earnings by $1,794, the difference in means between the two groups.</p>
+</div>
+<div id="section-21" class="slide section level1">
+<h1></h1>
+<p>Finally, we would like to extract our results in a convenient format to be used in an article, report or academic paper. Tools for doing so are found in the <code>estout</code> package. Unlike all other commands used so far, estout is not a standard bundled Stata package but rather one which has been created by a user. This means that we must install it using <code>ssc install estout</code>. This only needs to be run once. User-produced packages such as this are very useful for filling gaps in the main set of Stata commands.</p>
+</div>
+<div id="section-22" class="slide section level1">
+<h1></h1>
+<p>Now that <code>estout</code> is installed, we can produce a nice-looking output of our t-test in a word doc, csv or latex format. The following code produces the results in a file which can be opened in Microsoft Word.</p>
+<pre class='stata'>. estpost ttest y, by(t)
+
+             │      e(b)   e(count)      e(se)       e(t)    e(df_t)     e(p_l)       e(p)     e(p_u) 
+─────────────+────────────────────────────────────────────────────────────────────────────────────────
+           y │ -1.794341        445   .6328533   -2.83532        443   .0023938   .0047875   .9976062 
+
+             │    e(N_1)    e(mu_1)     e(N_2)    e(mu_2) 
+─────────────+────────────────────────────────────────────
+           y │       260     4.5548        185   6.349142 
+
+. esttab using "ttest_y_by_t.rtf", replace
+(output written to ttest_y_by_t.rtf)
+</pre>
+</div>
+<div id="section-23" class="slide section level1">
+<h1></h1>
+<p>The first line of the above stores the values of <code>ttest y, by(t)</code>, the code run previously. The second formats and exports them to the specified destination. We can then view them as a tidy table in Word:</p>
+<div class="figure">
+<img src="wordexport.png" style="width:50.0%" alt="" />
+<p class="caption">Results table in word</p>
+</div>
+</div>
+<div id="section-24" class="slide section level1">
+<h1></h1>
+<p>The very final thing to do is to close the log file:</p>
+<pre class='stata'>. //log close
+</pre>
+</div>
+<div id="further-resources" class="slide section level1">
+<h1>4. Further resources</h1>
+<p>There exist a large number of comprehensive Stata resources available:</p>
+<ul>
+<li><p>User discussions at https://www.stata.com/statalist tackle many common problems</p></li>
+<li><p>Princeton’s introductory Stata course: https://data.princeton.edu/stata</p></li>
+<li><p>Harvard’s introductory Stata course: https://tutorials.iq.harvard.edu/Stata/StataIntro/StataIntro.html</p></li>
+<li><p>Stata’s own manual is verbose but useful: https://www.stata.com/manuals/gsm.pdf</p></li>
+</ul>
+</div>
+<div id="section-25" class="slide section level1">
+<h1></h1>
+<ul>
+<li><p>Cheatsheets can be very handy. If working a lot in Stata, its nice to have some printed copies of these next to your desk: https://geocenter.github.io/StataTraining/portfolio/01_resource/</p></li>
+<li><p>For those that want to learn more about how to structure large-scale social science projects and best coding practice, the definitive guide is Gentzkow and Shapiro (2014). This is particularly useful for those working as Research Assistants. It is found here: https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf</p></li>
+</ul>
+</div>
+</div>
+</body>
+</html>
