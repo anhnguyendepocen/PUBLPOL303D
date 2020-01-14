@@ -14,7 +14,7 @@
 
 - ***When I try to change into my main working directory, I get the error `unable to change to /XXX`.*** This is usually because there is a small mistake in the file path. You can get around this by manually choosing the directory using "File->Change working directory". This will change the directory and print the code to do so into the results window, which can then be copied into a .do file.
 
-- ***There's too much on the screen to have my .do file editor and main interface window open side-by-side.*** When working on a laptop, this is usually the case. You might like to restrict the main interface window to just the results and command windows. These are the only essential parts of the main interface.
+- ***There's too much on the screen to have my .do file editor and main interface window open side-by-side.*** This is usually the case when working on a laptop. You might like to restrict the main interface window to just the results and command windows. These are the only essential parts of the main interface.
 
 # 2. Useful Stata shortcuts
 
