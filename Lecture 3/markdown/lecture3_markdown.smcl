@@ -1,0 +1,108 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 3/markdown/lecture3_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}21 Jan 2020, 08:58:47
+{txt}
+{com}. //_1
+. // set directory
+. cd "~/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 3/markdown"
+{res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 3/markdown
+{txt}
+{com}. //_2
+. // set seed
+. set seed 123
+{txt}
+{com}. //_3
+. // simulate data
+. clear
+{txt}
+{com}. set obs 1000
+{txt}{p}
+number of observations (_N)  was 0,
+now 1,000
+{p_end}
+
+{com}. gen x = rnormal(0,0.1)
+{txt}
+{com}. gen z = 0.3*(x) + rnormal(0,0.1)
+{txt}
+{com}. gen y = x + 0.5*(z) + rnormal(0,0.1)
+{txt}
+{com}. //_4
+. // scatter plot
+. twoway scatter y x
+{res}{txt}
+{com}. graph export "scatterplot.png", replace
+{txt}(file scatterplot.png written in PNG format)
+
+{com}. //_5
+. regress y x
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}     1,000
+{txt}{hline 13}{c +}{hline 34}   F(1, 998)       = {res}   991.97
+{txt}       Model {c |} {res} 12.8742974         1  12.8742974   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 12.9525759       998  .012978533   {txt}R-squared       ={res}    0.4985
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4980
+{txt}       Total {c |} {res} 25.8268733       999  .025852726   {txt}Root MSE        =   {res} .11392
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}           y{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}x {c |}{col 14}{res}{space 2} 1.167971{col 26}{space 2} .0370837{col 37}{space 1}   31.50{col 46}{space 3}0.000{col 54}{space 4}   1.0952{col 67}{space 3} 1.240742
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} -.003084{col 26}{space 2} .0036034{col 37}{space 1}   -0.86{col 46}{space 3}0.392{col 54}{space 4} -.010155{col 67}{space 3} .0039871
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_6
+. twoway (scatter y x) (lfit y x)
+{res}{txt}
+{com}. graph export "scatterplot_lfit.png", replace
+{txt}(file scatterplot_lfit.png written in PNG format)
+
+{com}. //_7
+. // run regression
+. reg y x z
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}     1,000
+{txt}{hline 13}{c +}{hline 34}   F(2, 997)       = {res}   746.98
+{txt}       Model {c |} {res} 15.4897448         2  7.74487239   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 10.3371285       997  .010368233   {txt}R-squared       ={res}    0.5998
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5990
+{txt}       Total {c |} {res} 25.8268733       999  .025852726   {txt}Root MSE        =   {res} .10182
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}           y{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}x {c |}{col 14}{res}{space 2} 1.015388{col 26}{space 2} .0345095{col 37}{space 1}   29.42{col 46}{space 3}0.000{col 54}{space 4} .9476689{col 67}{space 3} 1.083108
+{txt}{space 11}z {c |}{col 14}{res}{space 2} .5136313{col 26}{space 2} .0323393{col 37}{space 1}   15.88{col 46}{space 3}0.000{col 54}{space 4} .4501704{col 67}{space 3} .5770922
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.0041282{col 26}{space 2} .0032214{col 37}{space 1}   -1.28{col 46}{space 3}0.200{col 54}{space 4}-.0104496{col 67}{space 3} .0021933
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_8
+. reg y x z if z < 0, robust
+
+{txt}Linear regression                               Number of obs     = {res}       503
+                                                {txt}F(2, 500)         =  {res}   307.99
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.5380
+                                                {txt}Root MSE          =    {res} .09835
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}           y{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 11}x {c |}{col 14}{res}{space 2} .9966302{col 26}{space 2} .0451005{col 37}{space 1}   22.10{col 46}{space 3}0.000{col 54}{space 4} .9080204{col 67}{space 3}  1.08524
+{txt}{space 11}z {c |}{col 14}{res}{space 2} .4647155{col 26}{space 2} .0616661{col 37}{space 1}    7.54{col 46}{space 3}0.000{col 54}{space 4} .3435589{col 67}{space 3} .5858721
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.0087436{col 26}{space 2} .0066394{col 37}{space 1}   -1.32{col 46}{space 3}0.188{col 54}{space 4}-.0217882{col 67}{space 3} .0043011
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_^
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 3/markdown/lecture3_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}21 Jan 2020, 08:58:53
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
