@@ -1,0 +1,90 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 4/markdown/lecture4_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}27 Jan 2020, 18:28:52
+{txt}
+{com}. //_1
+. // set directory
+. cd "~/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 4/markdown"
+{res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 4/markdown
+{txt}
+{com}. //_2
+. // set seed
+. set seed 123
+{txt}
+{com}. //_3
+. // simulate data
+. clear
+{txt}
+{com}. set obs 1000
+{txt}{p}
+number of observations (_N)  was 0,
+now 1,000
+{p_end}
+
+{com}. gen x = rnormal(0,0.1)
+{txt}
+{com}. gen z = 0.3*(x) + rnormal(0,0.5)
+{txt}
+{com}. gen y = x + 0.5*(z) + rnormal(0,0.5)
+{txt}
+{com}. //_4
+. // scatter plot
+. twoway scatter y x
+{res}{txt}
+{com}. graph export "scatter.png", replace
+{txt}(file scatter.png written in PNG format)
+
+{com}. //_5
+. // binned scatter plot
+. binscatter y x
+{res}{txt}
+{com}. graph export "binscatter.png", replace
+{txt}(file binscatter.png written in PNG format)
+
+{com}. //_6
+. sum x
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 11}x {c |}{res}      1,000    .0020498    .0971957  -.4604602   .2807839
+{txt}
+{com}. gen x_above_mean = 0
+{txt}
+{com}. replace x_above_mean = 1 if  x >= .002
+{txt}(502 real changes made)
+
+{com}. //_7
+. sum x
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 11}x {c |}{res}      1,000    .0020498    .0971957  -.4604602   .2807839
+{txt}
+{com}. drop x_above_mean
+{txt}
+{com}. gen x_above_mean = 0
+{txt}
+{com}. replace x_above_mean = 1 if x >= r(mean)
+{txt}(502 real changes made)
+
+{com}. //_8
+. // scatter plot
+. twoway scatter y x, graphregion(color("white"))  mcolor(black%50) ///
+> xtitle("Sales of bananas") ytitle("Sales of apples") ///
+> title("Sales last summer", color("black"))    
+{res}{txt}
+{com}. graph export "scatterclean.png", replace
+{txt}(file scatterclean.png written in PNG format)
+
+{com}. //_^
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 4/markdown/lecture4_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}27 Jan 2020, 18:29:02
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
