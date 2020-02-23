@@ -1,0 +1,137 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 6/markdown/lecture6_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}11 Feb 2020, 12:10:13
+{txt}
+{com}. //_1
+. use http://www.stata-press.com/data/r15/cattaneo2.dta
+{txt}(Excerpt from Cattaneo (2010) Journal of Econometrics 155: 138-154)
+
+{com}. //_2
+. ttest bweight, by(mbsmoke)
+
+{txt}Two-sample t test with equal variances
+{hline 9}{c TT}{hline 68}
+   Group{col 10}{c |}{col 16}Obs{col 27}Mean{col 35}Std. Err.{col 47}Std. Dev.{col 59}[95% Conf. Interval]
+{hline 9}{c +}{hline 68}
+nonsmoke {c |}{res}{col 12}  3,778{col 22} 3412.912{col 34} 9.284683{col 46} 570.6871{col 58} 3394.708{col 70} 3431.115
+  {txt}smoker {c |}{res}{col 12}    864{col 22}  3137.66{col 34} 19.08197{col 46} 560.8931{col 58} 3100.207{col 70} 3175.112
+{txt}{hline 9}{c +}{hline 68}
+combined {c |}{res}{col 12}  4,642{col 22}  3361.68{col 34} 8.495534{col 46} 578.8196{col 58} 3345.025{col 70} 3378.335
+{txt}{hline 9}{c +}{hline 68}
+    diff {c |}{res}{col 22} 275.2519{col 34}  21.4528{col 58} 233.1942{col 70} 317.3096
+{txt}{hline 9}{c BT}{hline 68}
+    diff = mean({res}nonsmoke{txt}) - mean({res}smoker{txt})                          t = {res} 12.8306
+{txt}Ho: diff = 0                                     degrees of freedom = {res}    4640
+
+    {txt}Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = {res}1.0000         {txt}Pr(|T| > |t|) = {res}0.0000          {txt}Pr(T > t) = {res}0.0000
+{txt}
+{com}. //_3
+. reg bweight mbsmoke fage mage mmarried prenatal1 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}     4,642
+{txt}{hline 13}{c +}{hline 34}   F(5, 4636)      = {res}    54.79
+{txt}       Model {c |} {res} 86754331.9         5  17350866.4   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 1.4681e+09     4,636  316680.307   {txt}R-squared       ={res}    0.0558
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0548
+{txt}       Total {c |} {res} 1.5549e+09     4,641  335032.156   {txt}Root MSE        =   {res} 562.74
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     bweight{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}mbsmoke {c |}{col 14}{res}{space 2}-221.0942{col 26}{space 2} 21.88583{col 37}{space 1}  -10.10{col 46}{space 3}0.000{col 54}{space 4}-264.0009{col 67}{space 3}-178.1876
+{txt}{space 8}fage {c |}{col 14}{res}{space 2}-.1582108{col 26}{space 2}  1.11529{col 37}{space 1}   -0.14{col 46}{space 3}0.887{col 54}{space 4} -2.34471{col 67}{space 3} 2.028289
+{txt}{space 8}mage {c |}{col 14}{res}{space 2} 2.701177{col 26}{space 2} 1.860517{col 37}{space 1}    1.45{col 46}{space 3}0.147{col 54}{space 4}-.9463219{col 67}{space 3} 6.348676
+{txt}{space 4}mmarried {c |}{col 14}{res}{space 2} 155.8368{col 26}{space 2} 21.75117{col 37}{space 1}    7.16{col 46}{space 3}0.000{col 54}{space 4} 113.1941{col 67}{space 3} 198.4794
+{txt}{space 3}prenatal1 {c |}{col 14}{res}{space 2} 50.14372{col 26}{space 2} 22.15484{col 37}{space 1}    2.26{col 46}{space 3}0.024{col 54}{space 4} 6.709693{col 67}{space 3} 93.57775
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3186.329{col 26}{space 2} 42.03457{col 37}{space 1}   75.80{col 46}{space 3}0.000{col 54}{space 4} 3103.921{col 67}{space 3} 3268.737
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_4
+. teffects nnmatch (bweight fage mage mmarried prenatal1) (mbsmoke)
+{res}
+{txt}Treatment-effects estimation{col 48}Number of obs {col 67}= {res}     4,642
+{txt:Estimator}{col 16}:{res: nearest-neighbor matching}{col 48}{txt:Matches: requested }{col 67}{txt:=}          1
+{txt:Outcome model}{col 16}:{res: matching}{txt}{col 63}min {col 67}= {res}         1
+{txt:Distance metric: }{res:Mahalanobis}{col 63}{txt:max }{col 67}{txt:=}         39
+{txt}{hline 23}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 24}{c |}{col 36}   AI Robust
+{col 1}               bweight{col 24}{c |}      Coef.{col 36}   Std. Err.{col 48}      z{col 56}   P>|z|{col 64}     [95% Con{col 77}f. Interval]
+{hline 23}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}ATE                    {txt}{c |}
+{space 15}mbsmoke {c |}
+(smoker vs nonsmoker)  {c |}{col 24}{res}{space 2}-244.1497{col 36}{space 2}  27.2671{col 47}{space 1}   -8.95{col 56}{space 3}0.000{col 64}{space 4}-297.5923{col 77}{space 3}-190.7072
+{txt}{hline 23}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. //_5
+. logit mbsmoke fage mage mmarried prenatal1
+
+{res}{txt}Iteration 0:{space 3}log likelihood = {res:-2230.7484}  
+Iteration 1:{space 3}log likelihood = {res: -2108.094}  
+Iteration 2:{space 3}log likelihood = {res:-2101.7775}  
+Iteration 3:{space 3}log likelihood = {res:-2101.7739}  
+Iteration 4:{space 3}log likelihood = {res:-2101.7739}  
+{res}
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}     4,642
+{txt}{col 49}LR chi2({res}4{txt}){col 67}= {res}    257.95
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-2101.7739{txt}{col 49}Pseudo R2{col 67}= {res}    0.0578
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     mbsmoke{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}fage {c |}{col 14}{res}{space 2}-.0060865{col 26}{space 2} .0045827{col 37}{space 1}   -1.33{col 46}{space 3}0.184{col 54}{space 4}-.0150685{col 67}{space 3} .0028954
+{txt}{space 8}mage {c |}{col 14}{res}{space 2} .0028582{col 26}{space 2} .0083083{col 37}{space 1}    0.34{col 46}{space 3}0.731{col 54}{space 4}-.0134257{col 67}{space 3} .0191422
+{txt}{space 4}mmarried {c |}{col 14}{res}{space 2}-1.073756{col 26}{space 2} .0934929{col 37}{space 1}  -11.48{col 46}{space 3}0.000{col 54}{space 4}-1.256998{col 67}{space 3}-.8905132
+{txt}{space 3}prenatal1 {c |}{col 14}{res}{space 2}-.3468578{col 26}{space 2} .0931274{col 37}{space 1}   -3.72{col 46}{space 3}0.000{col 54}{space 4}-.5293842{col 67}{space 3}-.1643315
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.4592651{col 26}{space 2} .1842682{col 37}{space 1}   -2.49{col 46}{space 3}0.013{col 54}{space 4}-.8204241{col 67}{space 3}-.0981061
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. //_6
+. predict p_score
+{txt}(option {bf:pr} assumed; Pr(mbsmoke))
+
+{com}. //_7
+. teffects nnmatch (bweight p_score) (mbsmoke)
+{res}
+{txt}Treatment-effects estimation{col 48}Number of obs {col 67}= {res}     4,642
+{txt:Estimator}{col 16}:{res: nearest-neighbor matching}{col 48}{txt:Matches: requested }{col 67}{txt:=}          1
+{txt:Outcome model}{col 16}:{res: matching}{txt}{col 63}min {col 67}= {res}         1
+{txt:Distance metric: }{res:Mahalanobis}{col 63}{txt:max }{col 67}{txt:=}         39
+{txt}{hline 23}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 24}{c |}{col 36}   AI Robust
+{col 1}               bweight{col 24}{c |}      Coef.{col 36}   Std. Err.{col 48}      z{col 56}   P>|z|{col 64}     [95% Con{col 77}f. Interval]
+{hline 23}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}ATE                    {txt}{c |}
+{space 15}mbsmoke {c |}
+(smoker vs nonsmoker)  {c |}{col 24}{res}{space 2}-236.2494{col 36}{space 2} 25.69559{col 47}{space 1}   -9.19{col 56}{space 3}0.000{col 64}{space 4}-286.6118{col 77}{space 3}-185.8869
+{txt}{hline 23}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. //_8
+. teffects psmatch (bweight) (mbsmoke fage mage mmarried prenatal1)
+{res}
+{txt}Treatment-effects estimation{col 48}Number of obs {col 67}= {res}     4,642
+{txt:Estimator}{col 16}:{res: propensity-score matching}{col 48}{txt:Matches: requested }{col 67}{txt:=}          1
+{txt:Outcome model}{col 16}:{res: matching}{txt}{col 63}min {col 67}= {res}         1
+{txt:Treatment model}{col 16}:{res: logit}{col 63}{txt:max }{col 67}{txt:=}         39
+{txt}{hline 23}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 24}{c |}{col 36}   AI Robust
+{col 1}               bweight{col 24}{c |}      Coef.{col 36}   Std. Err.{col 48}      z{col 56}   P>|z|{col 64}     [95% Con{col 77}f. Interval]
+{hline 23}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}ATE                    {txt}{c |}
+{space 15}mbsmoke {c |}
+(smoker vs nonsmoker)  {c |}{col 24}{res}{space 2}-235.3192{col 36}{space 2} 25.92234{col 47}{space 1}   -9.08{col 56}{space 3}0.000{col 64}{space 4} -286.126{col 77}{space 3}-184.5123
+{txt}{hline 23}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. //_^
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 6/markdown/lecture6_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}11 Feb 2020, 12:10:16
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

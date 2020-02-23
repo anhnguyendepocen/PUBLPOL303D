@@ -1,0 +1,266 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 7/markdown/lecture7_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}18 Feb 2020, 17:58:23
+{txt}
+{com}. //_1
+. use "http://www.stata-press.com/data/r15/cattaneo2.dta", clear
+{txt}(Excerpt from Cattaneo (2010) Journal of Econometrics 155: 138-154)
+
+{com}. gen price = -mbsmoke + rnormal(0,1)
+{txt}
+{com}. //_2
+. ivregress 2sls bweight (mbsmoke = price)
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}     4,642
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}     25.33
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.0340
+{txt}{col 51}Root MSE{col 67}=    {res} 568.83
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     bweight{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}mbsmoke {c |}{col 14}{res}{space 2} -299.053{col 26}{space 2} 59.42053{col 37}{space 1}   -5.03{col 46}{space 3}0.000{col 54}{space 4}-415.5151{col 67}{space 3}-182.5909
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3417.342{col 26}{space 2} 13.85722{col 37}{space 1}  246.61{col 46}{space 3}0.000{col 54}{space 4} 3390.182{col 67}{space 3} 3444.501
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 4}Instrumented:{space 2}mbsmoke{p_end}
+{p 0 15 4}Instruments:{space 3}price{p_end}
+
+{com}. //_3
+. ivregress 2sls bweight medu fage fedu mmarried mhisp fhisp foreign birthmonth (mbsmoke = price)
+{res}
+{txt}{col 1}Instrumental variables (2SLS) regression{col 51}Number of obs{col 67}= {res}     4,642
+{txt}{col 1}{col 51}Wald chi2({res}9{txt}){col 67}= {res}    195.41
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 1}{col 51}R-squared{col 67}= {res}    0.0559
+{txt}{col 51}Root MSE{col 67}=    {res} 562.34
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     bweight{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}mbsmoke {c |}{col 14}{res}{space 2}-249.4624{col 26}{space 2} 63.27864{col 37}{space 1}   -3.94{col 46}{space 3}0.000{col 54}{space 4}-373.4863{col 67}{space 3}-125.4385
+{txt}{space 8}medu {c |}{col 14}{res}{space 2} 4.713528{col 26}{space 2} 4.139103{col 37}{space 1}    1.14{col 46}{space 3}0.255{col 54}{space 4}-3.398966{col 67}{space 3} 12.82602
+{txt}{space 8}fage {c |}{col 14}{res}{space 2} .1811978{col 26}{space 2} 1.082831{col 37}{space 1}    0.17{col 46}{space 3}0.867{col 54}{space 4}-1.941112{col 67}{space 3} 2.303507
+{txt}{space 8}fedu {c |}{col 14}{res}{space 2} 2.622193{col 26}{space 2} 3.144285{col 37}{space 1}    0.83{col 46}{space 3}0.404{col 54}{space 4}-3.540492{col 67}{space 3} 8.784878
+{txt}{space 4}mmarried {c |}{col 14}{res}{space 2} 162.4491{col 26}{space 2}  23.3281{col 37}{space 1}    6.96{col 46}{space 3}0.000{col 54}{space 4} 116.7269{col 67}{space 3} 208.1713
+{txt}{space 7}mhisp {c |}{col 14}{res}{space 2}  62.2423{col 26}{space 2} 68.34053{col 37}{space 1}    0.91{col 46}{space 3}0.362{col 54}{space 4}-71.70267{col 67}{space 3} 196.1873
+{txt}{space 7}fhisp {c |}{col 14}{res}{space 2} 9.006227{col 26}{space 2} 63.74046{col 37}{space 1}    0.14{col 46}{space 3}0.888{col 54}{space 4}-115.9228{col 67}{space 3} 133.9352
+{txt}{space 5}foreign {c |}{col 14}{res}{space 2}-92.16012{col 26}{space 2} 39.94066{col 37}{space 1}   -2.31{col 46}{space 3}0.021{col 54}{space 4}-170.4424{col 67}{space 3}-13.87786
+{txt}{space 2}birthmonth {c |}{col 14}{res}{space 2} .9211979{col 26}{space 2} 2.462629{col 37}{space 1}    0.37{col 46}{space 3}0.708{col 54}{space 4}-3.905466{col 67}{space 3} 5.747862
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3193.868{col 26}{space 2} 60.72761{col 37}{space 1}   52.59{col 46}{space 3}0.000{col 54}{space 4} 3074.844{col 67}{space 3} 3312.892
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 15 4}Instrumented:{space 2}mbsmoke{p_end}
+{p 0 15 4}Instruments:{space 3}medu fage fedu mmarried mhisp fhisp foreign birthmonth price{p_end}
+
+{com}. //_4
+. use "http://www.stata-press.com/data/r15/cattaneo2.dta", clear
+{txt}(Excerpt from Cattaneo (2010) Journal of Econometrics 155: 138-154)
+
+{com}. keep if mage >= 18 & mage <=35
+{txt}(488 observations deleted)
+
+{com}. //_5
+. reg bweight mage
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}     4,154
+{txt}{hline 13}{c +}{hline 34}   F(1, 4152)      = {res}    25.24
+{txt}       Model {c |} {res} 8114041.26         1  8114041.26   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 1.3347e+09     4,152  321454.829   {txt}R-squared       ={res}    0.0060
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0058
+{txt}       Total {c |} {res} 1.3428e+09     4,153  323331.204   {txt}Root MSE        =   {res} 566.97
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     bweight{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}mage {c |}{col 14}{res}{space 2} 9.679711{col 26}{space 2} 1.926654{col 37}{space 1}    5.02{col 46}{space 3}0.000{col 54}{space 4} 5.902437{col 67}{space 3} 13.45699
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3114.394{col 26}{space 2} 51.57005{col 37}{space 1}   60.39{col 46}{space 3}0.000{col 54}{space 4}  3013.29{col 67}{space 3} 3215.499
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_6
+. twoway lfit bweight mage, lcolor(black) ///
+> graphregion(color(white)) 
+{res}{txt}
+{com}. graph export "linear.png", replace
+{txt}(file linear.png written in PNG format)
+
+{com}. //_7
+. reg bweight i.mage
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}     4,154
+{txt}{hline 13}{c +}{hline 34}   F(17, 4136)     = {res}     2.15
+{txt}       Model {c |} {res} 11740961.5        17  690644.796   {txt}Prob > F        ={res}    0.0041
+{txt}    Residual {c |} {res} 1.3311e+09     4,136  321821.453   {txt}R-squared       ={res}    0.0087
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0047
+{txt}       Total {c |} {res} 1.3428e+09     4,153  323331.204   {txt}Root MSE        =   {res} 567.29
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     bweight{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}mage {c |}
+{space 9}19  {c |}{col 14}{res}{space 2} 32.29816{col 26}{space 2} 63.86379{col 37}{space 1}    0.51{col 46}{space 3}0.613{col 54}{space 4}-92.90921{col 67}{space 3} 157.5055
+{txt}{space 9}20  {c |}{col 14}{res}{space 2}-6.559809{col 26}{space 2} 62.92476{col 37}{space 1}   -0.10{col 46}{space 3}0.917{col 54}{space 4}-129.9262{col 67}{space 3} 116.8066
+{txt}{space 9}21  {c |}{col 14}{res}{space 2} 74.94038{col 26}{space 2} 62.80868{col 37}{space 1}    1.19{col 46}{space 3}0.233{col 54}{space 4} -48.1984{col 67}{space 3} 198.0792
+{txt}{space 9}22  {c |}{col 14}{res}{space 2} 63.64096{col 26}{space 2} 61.79752{col 37}{space 1}    1.03{col 46}{space 3}0.303{col 54}{space 4}-57.51541{col 67}{space 3} 184.7973
+{txt}{space 9}23  {c |}{col 14}{res}{space 2} 109.9243{col 26}{space 2} 60.67747{col 37}{space 1}    1.81{col 46}{space 3}0.070{col 54}{space 4}-9.036212{col 67}{space 3} 228.8847
+{txt}{space 9}24  {c |}{col 14}{res}{space 2} 80.91053{col 26}{space 2} 60.09693{col 37}{space 1}    1.35{col 46}{space 3}0.178{col 54}{space 4}-36.91178{col 67}{space 3} 198.7328
+{txt}{space 9}25  {c |}{col 14}{res}{space 2} 79.18255{col 26}{space 2} 59.53957{col 37}{space 1}    1.33{col 46}{space 3}0.184{col 54}{space 4}-37.54701{col 67}{space 3} 195.9121
+{txt}{space 9}26  {c |}{col 14}{res}{space 2} 130.4079{col 26}{space 2}  58.9774{col 37}{space 1}    2.21{col 46}{space 3}0.027{col 54}{space 4} 14.78048{col 67}{space 3} 246.0353
+{txt}{space 9}27  {c |}{col 14}{res}{space 2} 152.4614{col 26}{space 2} 60.06033{col 37}{space 1}    2.54{col 46}{space 3}0.011{col 54}{space 4} 34.71091{col 67}{space 3}  270.212
+{txt}{space 9}28  {c |}{col 14}{res}{space 2} 116.7346{col 26}{space 2} 58.77504{col 37}{space 1}    1.99{col 46}{space 3}0.047{col 54}{space 4} 1.503951{col 67}{space 3} 231.9653
+{txt}{space 9}29  {c |}{col 14}{res}{space 2} 171.1589{col 26}{space 2} 58.80343{col 37}{space 1}    2.91{col 46}{space 3}0.004{col 54}{space 4} 55.87256{col 67}{space 3} 286.4453
+{txt}{space 9}30  {c |}{col 14}{res}{space 2} 108.4181{col 26}{space 2} 59.44139{col 37}{space 1}    1.82{col 46}{space 3}0.068{col 54}{space 4}-8.118954{col 67}{space 3} 224.9552
+{txt}{space 9}31  {c |}{col 14}{res}{space 2} 154.6987{col 26}{space 2}  60.7184{col 37}{space 1}    2.55{col 46}{space 3}0.011{col 54}{space 4} 35.65801{col 67}{space 3} 273.7394
+{txt}{space 9}32  {c |}{col 14}{res}{space 2}  166.827{col 26}{space 2}  63.1027{col 37}{space 1}    2.64{col 46}{space 3}0.008{col 54}{space 4} 43.11182{col 67}{space 3} 290.5422
+{txt}{space 9}33  {c |}{col 14}{res}{space 2} 95.31767{col 26}{space 2}  65.8431{col 37}{space 1}    1.45{col 46}{space 3}0.148{col 54}{space 4}-33.77022{col 67}{space 3} 224.4056
+{txt}{space 9}34  {c |}{col 14}{res}{space 2} 175.0332{col 26}{space 2} 68.57209{col 37}{space 1}    2.55{col 46}{space 3}0.011{col 54}{space 4} 40.59505{col 67}{space 3} 309.4714
+{txt}{space 9}35  {c |}{col 14}{res}{space 2} 217.3445{col 26}{space 2}  72.7538{col 37}{space 1}    2.99{col 46}{space 3}0.003{col 54}{space 4} 74.70788{col 67}{space 3}  359.981
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 3261.789{col 26}{space 2} 49.19055{col 37}{space 1}   66.31{col 46}{space 3}0.000{col 54}{space 4}  3165.35{col 67}{space 3} 3358.229
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_8
+. regsave
+{txt}
+{com}. //_9
+. gen lower = coef - 1.96*stderr
+{txt}
+{com}. gen upper = coef + 1.96*stderr
+{txt}
+{com}. //_10
+. gen mage = substr(var,1,2)
+{txt}
+{com}. destring mage, replace force
+{txt}mage: contains nonnumeric characters; {res}replaced {txt}as {res}byte
+{txt}(1 missing value generated)
+{res}{txt}
+{com}. drop if mage < 20
+{txt}(2 observations deleted)
+
+{com}. drop if mage == .
+{txt}(1 observation deleted)
+
+{com}. twoway (scatter coef mage, mcolor(black)) ///
+> (rcap lower upper mage, lcolor(black%50)), ///
+> graphregion(color(white)) ///
+> legend(off) ytitle("Coefficient")
+{res}{txt}
+{com}. graph export "dummies.png", replace
+{txt}(file dummies.png written in PNG format)
+
+{com}. //_11
+. use "http://www.stata-press.com/data/r15/cattaneo2.dta", clear
+{txt}(Excerpt from Cattaneo (2010) Journal of Econometrics 155: 138-154)
+
+{com}. reg bweight mage medu fage fedu mmarried mhisp fhisp foreign birthmonth 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}     4,642
+{txt}{hline 13}{c +}{hline 34}   F(9, 4632)      = {res}    19.72
+{txt}       Model {c |} {res} 57381997.5         9   6375777.5   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 1.4975e+09     4,632  323294.957   {txt}R-squared       ={res}    0.0369
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0350
+{txt}       Total {c |} {res} 1.5549e+09     4,641  335032.156   {txt}Root MSE        =   {res} 568.59
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     bweight{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}mage {c |}{col 14}{res}{space 2} 2.447161{col 26}{space 2} 1.964603{col 37}{space 1}    1.25{col 46}{space 3}0.213{col 54}{space 4}-1.404396{col 67}{space 3} 6.298718
+{txt}{space 8}medu {c |}{col 14}{res}{space 2} 7.291883{col 26}{space 2} 4.231819{col 37}{space 1}    1.72{col 46}{space 3}0.085{col 54}{space 4}-1.004499{col 67}{space 3} 15.58826
+{txt}{space 8}fage {c |}{col 14}{res}{space 2} -.797766{col 26}{space 2} 1.230483{col 37}{space 1}   -0.65{col 46}{space 3}0.517{col 54}{space 4}-3.210098{col 67}{space 3} 1.614567
+{txt}{space 8}fedu {c |}{col 14}{res}{space 2} 5.691847{col 26}{space 2} 3.158015{col 37}{space 1}    1.80{col 46}{space 3}0.072{col 54}{space 4}-.4993671{col 67}{space 3} 11.88306
+{txt}{space 4}mmarried {c |}{col 14}{res}{space 2} 193.6681{col 26}{space 2} 22.10056{col 37}{space 1}    8.76{col 46}{space 3}0.000{col 54}{space 4} 150.3405{col 67}{space 3} 236.9958
+{txt}{space 7}mhisp {c |}{col 14}{res}{space 2} 90.20593{col 26}{space 2} 68.79699{col 37}{space 1}    1.31{col 46}{space 3}0.190{col 54}{space 4}-44.66893{col 67}{space 3} 225.0808
+{txt}{space 7}fhisp {c |}{col 14}{res}{space 2} 19.07074{col 26}{space 2} 64.45051{col 37}{space 1}    0.30{col 46}{space 3}0.767{col 54}{space 4} -107.283{col 67}{space 3} 145.4244
+{txt}{space 5}foreign {c |}{col 14}{res}{space 2}-75.96108{col 26}{space 2} 40.15636{col 37}{space 1}   -1.89{col 46}{space 3}0.059{col 54}{space 4}-154.6867{col 67}{space 3} 2.764513
+{txt}{space 2}birthmonth {c |}{col 14}{res}{space 2} .5428616{col 26}{space 2}    2.488{col 37}{space 1}    0.22{col 46}{space 3}0.827{col 54}{space 4}-4.334803{col 67}{space 3} 5.420527
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3017.212{col 26}{space 2} 54.13426{col 37}{space 1}   55.74{col 46}{space 3}0.000{col 54}{space 4} 2911.083{col 67}{space 3} 3123.341
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_12
+. test mage medu fage fedu mmarried mhisp fhisp foreign birthmonth 
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}mage = 0{p_end}
+{p 0 7}{space 1}{text:( 2)}{space 1} medu = 0{p_end}
+{p 0 7}{space 1}{text:( 3)}{space 1} fage = 0{p_end}
+{p 0 7}{space 1}{text:( 4)}{space 1} fedu = 0{p_end}
+{p 0 7}{space 1}{text:( 5)}{space 1} mmarried = 0{p_end}
+{p 0 7}{space 1}{text:( 6)}{space 1} mhisp = 0{p_end}
+{p 0 7}{space 1}{text:( 7)}{space 1} fhisp = 0{p_end}
+{p 0 7}{space 1}{text:( 8)}{space 1} foreign = 0{p_end}
+{p 0 7}{space 1}{text:( 9)}{space 1} birthmonth = 0{p_end}
+
+{txt}       F(  9,  4632) ={res}   19.72
+{txt}{col 13}Prob > F ={res}    0.0000
+{txt}
+{com}. //_13
+. sysuse auto, clear
+{txt}(1978 Automobile Data)
+
+{com}. //_14
+. regress mpg weight
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        74
+{txt}{hline 13}{c +}{hline 34}   F(1, 72)        = {res}   134.62
+{txt}       Model {c |} {res}  1591.9902         1   1591.9902   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 851.469256        72  11.8259619   {txt}R-squared       ={res}    0.6515
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6467
+{txt}       Total {c |} {res} 2443.45946        73  33.4720474   {txt}Root MSE        =   {res} 3.4389
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}         mpg{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}weight {c |}{col 14}{res}{space 2}-.0060087{col 26}{space 2} .0005179{col 37}{space 1}  -11.60{col 46}{space 3}0.000{col 54}{space 4}-.0070411{col 67}{space 3}-.0049763
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 39.44028{col 26}{space 2} 1.614003{col 37}{space 1}   24.44{col 46}{space 3}0.000{col 54}{space 4} 36.22283{col 67}{space 3} 42.65774
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_15
+. local rsqf e(r2)
+{txt}
+{com}. //_16
+. local rsqv = e(r2)
+{txt}
+{com}. //_17
+. display `rsqf'       // this gives the current R-squared
+{res}.65153125
+{txt}
+{com}. //_18
+. display `rsqv'       // this gives the same
+{res}.65153125
+{txt}
+{com}. //_19
+. regress mpg weight foreign
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        74
+{txt}{hline 13}{c +}{hline 34}   F(2, 71)        = {res}    69.75
+{txt}       Model {c |} {res}  1619.2877         2  809.643849   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 824.171761        71   11.608053   {txt}R-squared       ={res}    0.6627
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6532
+{txt}       Total {c |} {res} 2443.45946        73  33.4720474   {txt}Root MSE        =   {res} 3.4071
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}         mpg{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 6}weight {c |}{col 14}{res}{space 2}-.0065879{col 26}{space 2} .0006371{col 37}{space 1}  -10.34{col 46}{space 3}0.000{col 54}{space 4}-.0078583{col 67}{space 3}-.0053175
+{txt}{space 5}foreign {c |}{col 14}{res}{space 2}-1.650029{col 26}{space 2} 1.075994{col 37}{space 1}   -1.53{col 46}{space 3}0.130{col 54}{space 4}  -3.7955{col 67}{space 3} .4954422
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  41.6797{col 26}{space 2} 2.165547{col 37}{space 1}   19.25{col 46}{space 3}0.000{col 54}{space 4} 37.36172{col 67}{space 3} 45.99768
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. //_20
+. display `rsqf'       // the gives the new R-squared
+{res}.66270291
+{txt}
+{com}. //_21
+. display  `rsqv'       // this gives the old R-squared
+{res}.65153125
+{txt}
+{com}. //_^
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 7/markdown/lecture7_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}18 Feb 2020, 17:58:29
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

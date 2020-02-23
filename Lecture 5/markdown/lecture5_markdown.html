@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+<style>
+/* CSS for Markstat 2.0 using Pandoc 2.0 */
+body{padding:14px 28px;}
+body, table {font-family: Helvetica, Arial, Sans-serif; font-size: 14px;}
+h1, h2, h3, h4 {font-weight: normal; color: #3366cc}
+h1 {font-size: 200%;}
+h2 {font-size: 150%;}
+h3 {font-size: 120%;}
+h4 {font-size: 100%; font-weight:bold}
+img.center {display:block; margin-left:auto; margin-right:auto}
+.small{font-size:8pt;}
+a {color: black;}
+a:visited {color: #808080;}
+a.plain {text-decoration:none;}
+a.plain:hover {text-decoration:underline;}
+.em {font-weight:bold;}
+pre, code {font-family: "lucida console", monospace;}
+pre.stata {font-size:13px; line-height:13px;}
+pre {padding:8px; border:1px solid #c0c0c0; border-radius:8px; background-color:#fdfdfd;}
+code {color:#3366cc; background-color:#fafafa;}
+pre code { color:black; background-color:white}
+/* Added for Pandoc */
+figure > img, div.figure > img {display:block; margin:auto}
+figcaption, p.caption {text-align:center; font-weight:bold; color:#3366cc;}
+h1.title {text-align:center; margin-bottom:0}
+p.author, h2.author {font-style:italic; text-align:center;margin-top:4px;margin-bottom:0}
+p.date, h3.date {text-align:center;margin-top:4px; margin-bottom:0}
+/* Tables*/
+table { margin:auto; border-collapse:collapse; }
+table caption { margin-bottom:1ex;}
+th, td { padding:4px 6px;}
+thead tr:first-child th {border-top:1px solid black; padding-top:6px}
+thead tr:last-child  th {padding-bottom:6px}
+tbody tr:first-child td {border-top:1px solid black; padding-top:6px}
+tbody tr:last-child  td {padding-bottom:6px;}
+table tbody:last-child tr:last-child td {border-bottom:1px solid black;}
+</style>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Jack Blundell" />
+  <title>Lecture 5: Interactions in regressions and simplifying your code</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Lecture 5: Interactions in regressions and simplifying your code</h1>
+<p class="author">Jack Blundell</p>
+<p class="date">PUBLPOL 330D Applied Econometrics for Public Policy, Winter 2020</p>
+</header>
+<ul>
+<li><p>My email: jackblundell@stanford.edu</p></li>
+<li><p>My office hours: 8.30 - 10.30am every Thursday at Econ 350 (Landau building)</p></li>
+<li><p>Section (further office hours): 2.30 - 3.20pm every Friday (Bass B312)</p></li>
+</ul>
+<h2 id="interactions">1. Interactions</h2>
+<p>Lets look at a model where we regress log earnings on education and gender:</p>
+<p><br /><span class="math display"><em>e</em><em>a</em><em>r</em><em>n</em><em>i</em><em>n</em><em>g</em><em>s</em> = <em>β</em><sub>0</sub> + <em>β</em><sub>1</sub><em>e</em><em>d</em><em>u</em><em>c</em> + <em>β</em><sub>2</sub><em>f</em><em>e</em><em>m</em><em>a</em><em>l</em><em>e</em> + <em>ϵ</em></span><br /></p>
+<p><span class="math inline"><em>β</em><sub>1</sub></span> will tell us how much log earnings increases for an additional year of education, conditional on gender.</p>
+<p>But in this model we do not allow the relationship between earnings and education to vary by gender. It could be that men have a higher return to education than women. Here we are constraining the coefficient to be the same for both genders.</p>
+<p>We can relax this, potentially generating a better fit to the data. One approach would be to run the model seperately on men and women, then inspect the coefficients. The Stata code for this is</p>
+<pre><code>reg earnings educ if female == 1
+reg earnings educ if female == 0</code></pre>
+<p>However, we can also keep using all the data and do this directly by including an interaction term:</p>
+<p><br /><span class="math display"><em>e</em><em>a</em><em>r</em><em>n</em><em>i</em><em>n</em><em>g</em><em>s</em> = <em>β</em><sub>0</sub> + <em>β</em><sub>1</sub><em>e</em><em>d</em><em>u</em><em>c</em> + <em>β</em><sub>2</sub><em>f</em><em>e</em><em>m</em><em>a</em><em>l</em><em>e</em> + <em>β</em><sub>3</sub><em>e</em><em>d</em><em>u</em><em>c</em> * <em>f</em><em>e</em><em>m</em><em>a</em><em>l</em><em>e</em> + <em>ϵ</em></span><br /></p>
+<ul>
+<li><p>If <span class="math inline"><em>β</em><sub>3</sub></span> = 0, there is no difference in returns to education across gender.</p></li>
+<li><p>If <span class="math inline"><em>β</em><sub>3</sub></span> &gt; 0, women have a higher return than men.</p></li>
+<li><p>If <span class="math inline"><em>β</em><sub>3</sub></span> = 0, men have a higher return than women.</p></li>
+</ul>
+<p>In Stata, we can include interactions as follows:</p>
+<pre><code>reg earnings i.educ##i.female</code></pre>
+<p>The <code>i.</code> tells Stata that these are categorical variables. Replace this with <code>c.</code> if using a continuous variable.</p>
+<p><em>Important: When including interactions you always need to include the individual components. Stata does this for you.</em></p>
+<h2 id="reducing-repetition">2. Reducing repetition</h2>
+<p>One rule of coding is to <em>avoid repetition as much as possible</em>. Reducing repetition:</p>
+<ul>
+<li><p>makes mistakes less likely</p></li>
+<li><p>makes it easier to update your code later</p></li>
+<li><p>makes code easier to read</p></li>
+</ul>
+<h2 id="the-by-command">2.1 The “by” command</h2>
+<p>Lets say we want to inspect means by group. One option is to use <code>if</code>, as we have been doing:</p>
+<pre><code>sum earnings if education == &quot;high school&quot;
+sum earnings if education == &quot;college&quot;
+sum earnings if education == &quot;below high school&quot;</code></pre>
+<p>A convenient alternative is to use <code>by</code>. You will get the same result from:</p>
+<pre><code>sort education
+by education: sum earnings</code></pre>
+<p>What is going on here?</p>
+<ul>
+<li><code>sort</code> tells Stata to sort the data based on education. This is necessary before the command <code>by</code>.</li>
+<li><code>by education: sum earnings</code> tells Stata to perform operation <code>sum earnings</code> separately for each value of <code>education</code></li>
+</ul>
+<h2 id="looping-over-variables">2.2 Looping over variables</h2>
+<p>Lets say we have three variables <code>x</code>, <code>y</code> and <code>z</code>. Missing values for these variables are coded as -99 and we would like to drop all observations with any missing values.</p>
+<p>One valid approach is:</p>
+<pre><code>drop if x == -99
+drop if y == -99
+drop if z == -99</code></pre>
+<p>This involves a lot of repetition. When writing code, we try to avoid repetition where possible, keeping our scripts (.do files) as short as possible.</p>
+<p>We can instead use a loop which performs an operation to all variables in a <code>varlist</code>. A <code>varlist</code> is just a list of variable names:</p>
+<pre><code>foreach var of varlist x y z {
+    drop if `var&#39; == - 99
+}</code></pre>
+<p>What is going on here?</p>
+<ul>
+<li><code>foreach var of varlist</code> tells Stata we are going to run a block of code over multiple variables.</li>
+<li><code>x y z</code> provides the variables</li>
+<li><code>{</code> and <code>}</code> enclose the code to be performed</li>
+<li>variable names are substituted in place of <code>var</code></li>
+</ul>
+<p>This is useful whenever we want to apply a single operation to multiple variables.</p>
+<h2 id="looping-over-numbers">2.3 Looping over numbers</h2>
+<p>We can also loop over numbers held in a <code>numlist</code>.</p>
+<p>To illustrate, lets assume that we want to generate 10 new variables named var1, var2, var3 etc. We want all observations to have a value of 1 for all these new variables. The long-winded approach is:</p>
+<pre><code>gen var1
+gen var2
+gen var3
+gen var4
+gen var5
+gen var6
+gen var7
+gen var8
+gen var9
+gen var19</code></pre>
+<p>A better way to do this is:</p>
+<pre><code>foreach num of numlist 1:10 {
+    gen var`num&#39; = 1
+}</code></pre>
+<p>What is going on here?</p>
+<ul>
+<li><code>foreach num of numlist</code> tells Stata we are going to run a block of code over a list of numbers.</li>
+<li><code>1/10</code> means that we are looping over all integers between 1 and 10</li>
+<li><code>{</code> and <code>}</code> enclose the code to be performed</li>
+</ul>
+</body>
+</html>

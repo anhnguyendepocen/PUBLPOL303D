@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+<style>
+/* CSS for Markstat 2.0 using Pandoc 2.0 */
+body{padding:14px 28px;}
+body, table {font-family: Helvetica, Arial, Sans-serif; font-size: 14px;}
+h1, h2, h3, h4 {font-weight: normal; color: #3366cc}
+h1 {font-size: 200%;}
+h2 {font-size: 150%;}
+h3 {font-size: 120%;}
+h4 {font-size: 100%; font-weight:bold}
+img.center {display:block; margin-left:auto; margin-right:auto}
+.small{font-size:8pt;}
+a {color: black;}
+a:visited {color: #808080;}
+a.plain {text-decoration:none;}
+a.plain:hover {text-decoration:underline;}
+.em {font-weight:bold;}
+pre, code {font-family: "lucida console", monospace;}
+pre.stata {font-size:13px; line-height:13px;}
+pre {padding:8px; border:1px solid #c0c0c0; border-radius:8px; background-color:#fdfdfd;}
+code {color:#3366cc; background-color:#fafafa;}
+pre code { color:black; background-color:white}
+/* Added for Pandoc */
+figure > img, div.figure > img {display:block; margin:auto}
+figcaption, p.caption {text-align:center; font-weight:bold; color:#3366cc;}
+h1.title {text-align:center; margin-bottom:0}
+p.author, h2.author {font-style:italic; text-align:center;margin-top:4px;margin-bottom:0}
+p.date, h3.date {text-align:center;margin-top:4px; margin-bottom:0}
+/* Tables*/
+table { margin:auto; border-collapse:collapse; }
+table caption { margin-bottom:1ex;}
+th, td { padding:4px 6px;}
+thead tr:first-child th {border-top:1px solid black; padding-top:6px}
+thead tr:last-child  th {padding-bottom:6px}
+tbody tr:first-child td {border-top:1px solid black; padding-top:6px}
+tbody tr:last-child  td {padding-bottom:6px;}
+table tbody:last-child tr:last-child td {border-bottom:1px solid black;}
+</style>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Jack Blundell" />
+  <title>Lecture 6: Matching estimators and propensity scores</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Lecture 6: Matching estimators and propensity scores</h1>
+<p class="author">Jack Blundell</p>
+<p class="date">PUBLPOL 330D Applied Econometrics for Public Policy, Winter 2020</p>
+</header>
+<ul>
+<li><p>My email: jackblundell@stanford.edu</p></li>
+<li><p>My office hours: 8.30 - 10.30am every Thursday at Econ 350 (Landau building)</p></li>
+<li><p>Section (further office hours): 2.30 - 3.20pm every Friday (Bass B312)</p></li>
+</ul>
+<h2 id="matching-estimators">1. Matching estimators</h2>
+<p>Lets first load a Stata-provided dataset:</p>
+<pre class='stata'>. use http://www.stata-press.com/data/r15/cattaneo2.dta
+(Excerpt from Cattaneo (2010) Journal of Econometrics 155: 138-154)
+</pre>
+<p>Using this dataset, we would like to estimate the effect of mother smoking (<code>mbsmoke</code>) on birthweight (<code>bweight</code>). A first way to do this is the now-familiar t-test:</p>
+<pre class='stata'>. ttest bweight, by(mbsmoke)
+
+Two-sample t test with equal variances
+─────────┬────────────────────────────────────────────────────────────────────
+   Group │     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+─────────┼────────────────────────────────────────────────────────────────────
+nonsmoke │   3,778    3412.912    9.284683    570.6871    3394.708    3431.115
+  smoker │     864     3137.66    19.08197    560.8931    3100.207    3175.112
+─────────┼────────────────────────────────────────────────────────────────────
+combined │   4,642     3361.68    8.495534    578.8196    3345.025    3378.335
+─────────┼────────────────────────────────────────────────────────────────────
+    diff │            275.2519     21.4528                233.1942    317.3096
+─────────┴────────────────────────────────────────────────────────────────────
+    diff = mean(nonsmoke) - mean(smoker)                          t =  12.8306
+Ho: diff = 0                                     degrees of freedom =     4640
+
+    Ha: diff &lt; 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T &lt; t) = 1.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 0.0000
+</pre>
+<p>Birthweights in the non-smoker group are higher than in the smoker group, and the difference is statistically significant.</p>
+<p>However, there could be omitted factors. Perhaps younger mothers are more likely to smoke, and are also more likely to have children with low birthweight irrespective of smoking.</p>
+<p>Given this, we estimate a multivariate regression, adding control variables for age, marital status and whether or not the mother visited a doctor in the first trimester of pregnancy:</p>
+<pre class='stata'>. reg bweight mbsmoke fage mage mmarried prenatal1 
+
+      Source │       SS           df       MS      Number of obs   =     4,642
+─────────────┼──────────────────────────────────   F(5, 4636)      =     54.79
+       Model │  86754331.9         5  17350866.4   Prob > F        =    0.0000
+    Residual │  1.4681e+09     4,636  316680.307   R-squared       =    0.0558
+─────────────┼──────────────────────────────────   Adj R-squared   =    0.0548
+       Total │  1.5549e+09     4,641  335032.156   Root MSE        =    562.74
+
+─────────────┬────────────────────────────────────────────────────────────────
+     bweight │      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+─────────────┼────────────────────────────────────────────────────────────────
+     mbsmoke │  -221.0942   21.88583   -10.10   0.000    -264.0009   -178.1876
+        fage │  -.1582108    1.11529    -0.14   0.887     -2.34471    2.028289
+        mage │   2.701177   1.860517     1.45   0.147    -.9463219    6.348676
+    mmarried │   155.8368   21.75117     7.16   0.000     113.1941    198.4794
+   prenatal1 │   50.14372   22.15484     2.26   0.024     6.709693    93.57775
+       _cons │   3186.329   42.03457    75.80   0.000     3103.921    3268.737
+─────────────┴────────────────────────────────────────────────────────────────
+</pre>
+<p>The coefficient on <code>mbsmoke</code> is lower in magnitude, still negative and statistically significant.</p>
+<p>An alternative approach is to use a matching estimator. We can implement this in Stata by using the <code>teffects nnmatch</code> command.</p>
+<p>This will find the most-similar control group observation (non-smokers) for each treatment group observation (smokers), and vice-versa for treatment.</p>
+<pre class='stata'>. teffects nnmatch (bweight fage mage mmarried prenatal1) (mbsmoke)
+
+Treatment-effects estimation                   Number of obs      =      4,642
+Estimator      : nearest-neighbor matching     Matches: requested =          1
+Outcome model  : matching                                     min =          1
+Distance metric: Mahalanobis                                  max =         39
+───────────────────────┬────────────────────────────────────────────────────────────────
+                       │              AI Robust
+               bweight │      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+───────────────────────┼────────────────────────────────────────────────────────────────
+ATE                    │
+               mbsmoke │
+(smoker vs nonsmoker)  │  -244.1497    27.2671    -8.95   0.000    -297.5923   -190.7072
+───────────────────────┴────────────────────────────────────────────────────────────────
+</pre>
+<p>Here, <code>fage mage mmarried prenatal1</code> are the variables that will be used for the matching. The estimated treatment effect is still negative and statistically significant.</p>
+<h2 id="propensity-scores">2. Propensity scores</h2>
+<p>A more sophisticated approach will use the propensity score. This is the predicted probability of an individual being in the treatment (smoker) or control (non-smoker) based on covariates.</p>
+<p>To estimate the predicted probabilities (propensity scores), we can run a logistic (logit) regression of the treatment indicator on covariates:</p>
+<pre class='stata'>. logit mbsmoke fage mage mmarried prenatal1
+
+Iteration 0:   log likelihood = -2230.7484  
+Iteration 1:   log likelihood =  -2108.094  
+Iteration 2:   log likelihood = -2101.7775  
+Iteration 3:   log likelihood = -2101.7739  
+Iteration 4:   log likelihood = -2101.7739  
+
+Logistic regression                             Number of obs     =      4,642
+                                                LR chi2(4)        =     257.95
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2101.7739                     Pseudo R2         =     0.0578
+
+─────────────┬────────────────────────────────────────────────────────────────
+     mbsmoke │      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+─────────────┼────────────────────────────────────────────────────────────────
+        fage │  -.0060865   .0045827    -1.33   0.184    -.0150685    .0028954
+        mage │   .0028582   .0083083     0.34   0.731    -.0134257    .0191422
+    mmarried │  -1.073756   .0934929   -11.48   0.000    -1.256998   -.8905132
+   prenatal1 │  -.3468578   .0931274    -3.72   0.000    -.5293842   -.1643315
+       _cons │  -.4592651   .1842682    -2.49   0.013    -.8204241   -.0981061
+─────────────┴────────────────────────────────────────────────────────────────
+</pre>
+<p>Inspecting the coefficients, we see that smoking does indeed depend on some of the covariates.</p>
+<p>Next we generate a new variable called <code>p_score</code> containing the predicted probabilities (propensity scores), according to our logistic regression:</p>
+<pre class='stata'>. predict p_score
+(option pr assumed; Pr(mbsmoke))
+</pre>
+<p>Finally, we use this variable to match on</p>
+<pre class='stata'>. teffects nnmatch (bweight p_score) (mbsmoke)
+
+Treatment-effects estimation                   Number of obs      =      4,642
+Estimator      : nearest-neighbor matching     Matches: requested =          1
+Outcome model  : matching                                     min =          1
+Distance metric: Mahalanobis                                  max =         39
+───────────────────────┬────────────────────────────────────────────────────────────────
+                       │              AI Robust
+               bweight │      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+───────────────────────┼────────────────────────────────────────────────────────────────
+ATE                    │
+               mbsmoke │
+(smoker vs nonsmoker)  │  -236.2494   25.69559    -9.19   0.000    -286.6118   -185.8869
+───────────────────────┴────────────────────────────────────────────────────────────────
+</pre>
+<p>We could instead do the entire propensity score matching process using command <code>teffects psmatch</code>:</p>
+<pre class='stata'>. teffects psmatch (bweight) (mbsmoke fage mage mmarried prenatal1)
+
+Treatment-effects estimation                   Number of obs      =      4,642
+Estimator      : propensity-score matching     Matches: requested =          1
+Outcome model  : matching                                     min =          1
+Treatment model: logit                                        max =         39
+───────────────────────┬────────────────────────────────────────────────────────────────
+                       │              AI Robust
+               bweight │      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+───────────────────────┼────────────────────────────────────────────────────────────────
+ATE                    │
+               mbsmoke │
+(smoker vs nonsmoker)  │  -235.3192   25.92234    -9.08   0.000     -286.126   -184.5123
+───────────────────────┴────────────────────────────────────────────────────────────────
+</pre>
+</body>
+</html>
