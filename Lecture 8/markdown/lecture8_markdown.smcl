@@ -1,0 +1,164 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 8/markdown/lecture8_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Feb 2020, 18:13:17
+{txt}
+{com}. //_1
+. clear
+{txt}
+{com}. set obs 10000
+{txt}{p}
+number of observations (_N)  was 0,
+now 10,000
+{p_end}
+
+{com}. set seed 123
+{txt}
+{com}. gen test_score = runiform(0,100)
+{txt}
+{com}. gen p_degree = 0 + test_score/400
+{txt}
+{com}. replace p_degree = 0.5 + test_score/400 if test_score >= 70
+{txt}(3,013 real changes made)
+
+{com}. gen degree_rnum = runiform(0,1)
+{txt}
+{com}. gen degree = 0
+{txt}
+{com}. replace degree = 1 if degree_rnum < p_degree
+{txt}(2,775 real changes made)
+
+{com}. //_2
+. gen earnings = rnormal(30,1)
+{txt}
+{com}. replace earnings = earnings + 3 if degree == 1
+{txt}(2,775 real changes made)
+
+{com}. //_3
+. twoway lpoly degree test_score, graphregion(color(white)) ///
+> ytitle("Share obtaining degree") ///
+> xtitle("Test score")
+{res}{txt}
+{com}. graph export "poly_fit_degree.png", replace
+{txt}(file poly_fit_degree.png written in PNG format)
+
+{com}. //_4
+. rd degree test_score, z0(70)
+{res}Two variables specified; treatment is 
+assumed to jump from zero to one at Z=70. 
+
+ Assignment variable Z is test_score
+ Treatment variable X_T unspecified
+ Outcome variable y is degree
+
+Estimating for bandwidth 2.81444015661577
+Estimating for bandwidth 1.407220078307885
+Estimating for bandwidth 5.62888031323154
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      degree{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lwald {c |}{col 14}{res}{space 2} .5894928{col 26}{space 2} .0740284{col 37}{space 1}    7.96{col 46}{space 3}0.000{col 54}{space 4} .4443997{col 67}{space 3} .7345859
+{txt}{space 5}lwald50 {c |}{col 14}{res}{space 2} .5775503{col 26}{space 2} .1040789{col 37}{space 1}    5.55{col 46}{space 3}0.000{col 54}{space 4} .3735594{col 67}{space 3} .7815412
+{txt}{space 4}lwald200 {c |}{col 14}{res}{space 2} .5293372{col 26}{space 2} .0530041{col 37}{space 1}    9.99{col 46}{space 3}0.000{col 54}{space 4}  .425451{col 67}{space 3} .6332233
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. //_5
+. twoway lpoly earnings test_score, graphregion(color(white)) ///
+> ytitle("Earnings") ///
+> xtitle("Test score")
+{res}{txt}
+{com}. graph export "poly_fit_earnings.png", replace
+{txt}(file poly_fit_earnings.png written in PNG format)
+
+{com}. //_6
+. rd earnings test_score, z0(70)
+{res}Two variables specified; treatment is 
+assumed to jump from zero to one at Z=70. 
+
+ Assignment variable Z is test_score
+ Treatment variable X_T unspecified
+ Outcome variable y is earnings
+
+Estimating for bandwidth 3.710892471962227
+Estimating for bandwidth 1.855446235981113
+Estimating for bandwidth 7.421784943924454
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    earnings{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}lwald {c |}{col 14}{res}{space 2} 1.845421{col 26}{space 2} .2346194{col 37}{space 1}    7.87{col 46}{space 3}0.000{col 54}{space 4} 1.385575{col 67}{space 3} 2.305266
+{txt}{space 5}lwald50 {c |}{col 14}{res}{space 2}  1.81642{col 26}{space 2}  .320624{col 37}{space 1}    5.67{col 46}{space 3}0.000{col 54}{space 4} 1.188009{col 67}{space 3} 2.444832
+{txt}{space 4}lwald200 {c |}{col 14}{res}{space 2} 1.630205{col 26}{space 2} .1685503{col 37}{space 1}    9.67{col 46}{space 3}0.000{col 54}{space 4} 1.299852{col 67}{space 3} 1.960557
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. //_7
+. rd earnings degree test_score, z0(70)
+{res}Three variables specified; jump in treatment  
+at Z=70 will be estimated. Local Wald Estimate
+is the ratio of jump in outcome to jump in treatment.
+
+ Assignment variable Z is test_score
+ Treatment variable X_T is degree
+ Outcome variable y is earnings
+
+Estimating for bandwidth 3.710892471962227
+Estimating for bandwidth 1.855446235981113
+Estimating for bandwidth 7.421784943924454
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    earnings{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}numer {c |}{col 14}{res}{space 2} 1.845421{col 26}{space 2} .2341478{col 37}{space 1}    7.88{col 46}{space 3}0.000{col 54}{space 4}   1.3865{col 67}{space 3} 2.304342
+{txt}{space 7}denom {c |}{col 14}{res}{space 2} .5753128{col 26}{space 2} .0652194{col 37}{space 1}    8.82{col 46}{space 3}0.000{col 54}{space 4}  .447485{col 67}{space 3} .7031405
+{txt}{space 7}lwald {c |}{col 14}{res}{space 2} 3.207683{col 26}{space 2} .2810784{col 37}{space 1}   11.41{col 46}{space 3}0.000{col 54}{space 4} 2.656779{col 67}{space 3} 3.758586
+{txt}{space 5}numer50 {c |}{col 14}{res}{space 2}  1.81642{col 26}{space 2} .3194164{col 37}{space 1}    5.69{col 46}{space 3}0.000{col 54}{space 4} 1.190376{col 67}{space 3} 2.442465
+{txt}{space 5}denom50 {c |}{col 14}{res}{space 2} .5642868{col 26}{space 2} .0892516{col 37}{space 1}    6.32{col 46}{space 3}0.000{col 54}{space 4} .3893568{col 67}{space 3} .7392167
+{txt}{space 5}lwald50 {c |}{col 14}{res}{space 2} 3.218967{col 26}{space 2} .4324253{col 37}{space 1}    7.44{col 46}{space 3}0.000{col 54}{space 4} 2.371429{col 67}{space 3} 4.066505
+{txt}{space 4}numer200 {c |}{col 14}{res}{space 2} 1.630205{col 26}{space 2}  .168384{col 37}{space 1}    9.68{col 46}{space 3}0.000{col 54}{space 4} 1.300178{col 67}{space 3} 1.960231
+{txt}{space 4}denom200 {c |}{col 14}{res}{space 2} .5167046{col 26}{space 2} .0468351{col 37}{space 1}   11.03{col 46}{space 3}0.000{col 54}{space 4} .4249096{col 67}{space 3} .6084997
+{txt}{space 4}lwald200 {c |}{col 14}{res}{space 2} 3.155003{col 26}{space 2}  .212511{col 37}{space 1}   14.85{col 46}{space 3}0.000{col 54}{space 4} 2.738489{col 67}{space 3} 3.571517
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. //_8
+. rdplot earnings test_score, c(70)
+{res}
+RD Plot with evenly spaced mimicking variance number of bins using spacings estimators.
+
+{txt}{ralign 21: Cutoff c = 70}{col 22} {c |} {col 23}Left of {res}c{col 36}{txt}Right of {res}c{col 54}{txt}Number of obs  = {res}     10000
+{txt}{hline 22}{c +}{hline 22}{col 54}Kernel         = {res}{ralign 10:Uniform}
+{txt}{ralign 21:Number of obs}{col 22} {c |} {col 23}{res}     6987{col 37}     3013
+{txt}{ralign 21:Eff. Number of obs}{col 22} {c |} {col 23}{res}     6987{col 37}     3013
+{txt}{ralign 21:Order poly. fit (p)}{col 22} {c |} {col 23}{res}        4{col 37}        4
+{txt}{ralign 21:BW poly. fit (h)}{col 22} {c |} {col 23}{res}   69.997{col 37}   29.980
+{txt}{ralign 21:Number of bins scale}{col 22} {c |} {col 23}{res}    1.000{col 37}    1.000
+
+Outcome: earnings. Running variable: test_score.
+{txt}{hline 22}{c TT}{hline 22}
+{col 22} {c |} {col 23}Left of {res}c{col 36}{txt}Right of {res}c
+{txt}{hline 22}{c +}{hline 22}
+{ralign 21:Bins selected}{col 22} {c |} {col 23}{res}      121{col 37}      119
+{txt}{ralign 21:Average bin length}{col 22} {c |} {col 23}{res}    0.578{col 37}    0.252
+{txt}{ralign 21:Median bin length}{col 22} {c |} {col 23}{res}    0.578{col 37}    0.252
+{txt}{hline 22}{c +}{hline 22}
+{ralign 21:IMSE-optimal bins}{col 22} {c |} {col 23}{res}        7{col 37}        7
+{txt}{ralign 21:Mimicking Var. bins}{col 22} {c |} {col 23}{res}      121{col 37}      119
+{txt}{hline 22}{c +}{hline 22}
+{lalign 1:Rel. to IMSE-optimal:}{col 22} {c |} 
+{ralign 21:Implied scale}{col 22} {c |} {col 23}{res}   17.286{col 37}   17.000
+{txt}{ralign 21:WIMSE var. weight}{col 22} {c |} {col 23}{res}    0.000{col 37}    0.000
+{txt}{ralign 21:WIMSE bias weight}{col 22} {c |} {col 23}{res}    1.000{col 37}    1.000
+{txt}{hline 22}{c BT}{hline 22}
+
+{res}{txt}
+{com}. graph export "rdplot.png", replace
+{txt}(file rdplot.png written in PNG format)
+
+{com}. //_^
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 8/markdown/lecture8_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}25 Feb 2020, 18:13:22
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
