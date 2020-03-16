@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+<style>
+/* CSS for Markstat 2.0 using Pandoc 2.0 */
+body{padding:14px 28px;}
+body, table {font-family: Helvetica, Arial, Sans-serif; font-size: 14px;}
+h1, h2, h3, h4 {font-weight: normal; color: #3366cc}
+h1 {font-size: 200%;}
+h2 {font-size: 150%;}
+h3 {font-size: 120%;}
+h4 {font-size: 100%; font-weight:bold}
+img.center {display:block; margin-left:auto; margin-right:auto}
+.small{font-size:8pt;}
+a {color: black;}
+a:visited {color: #808080;}
+a.plain {text-decoration:none;}
+a.plain:hover {text-decoration:underline;}
+.em {font-weight:bold;}
+pre, code {font-family: "lucida console", monospace;}
+pre.stata {font-size:13px; line-height:13px;}
+pre {padding:8px; border:1px solid #c0c0c0; border-radius:8px; background-color:#fdfdfd;}
+code {color:#3366cc; background-color:#fafafa;}
+pre code { color:black; background-color:white}
+/* Added for Pandoc */
+figure > img, div.figure > img {display:block; margin:auto}
+figcaption, p.caption {text-align:center; font-weight:bold; color:#3366cc;}
+h1.title {text-align:center; margin-bottom:0}
+p.author, h2.author {font-style:italic; text-align:center;margin-top:4px;margin-bottom:0}
+p.date, h3.date {text-align:center;margin-top:4px; margin-bottom:0}
+/* Tables*/
+table { margin:auto; border-collapse:collapse; }
+table caption { margin-bottom:1ex;}
+th, td { padding:4px 6px;}
+thead tr:first-child th {border-top:1px solid black; padding-top:6px}
+thead tr:last-child  th {padding-bottom:6px}
+tbody tr:first-child td {border-top:1px solid black; padding-top:6px}
+tbody tr:last-child  td {padding-bottom:6px;}
+table tbody:last-child tr:last-child td {border-bottom:1px solid black;}
+</style>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Jack Blundell" />
+  <title>Lecture 8: Panel data and difference-in-difference designs</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Lecture 8: Panel data and difference-in-difference designs</h1>
+<p class="author">Jack Blundell</p>
+<p class="date">PUBLPOL 330D Applied Econometrics for Public Policy, Winter 2020</p>
+</header>
+<ul>
+<li>My email: jackblundell@stanford.edu</li>
+<li>My office hours: 8.30 - 10.30am every Thursday at Econ 350 (Landau building)</li>
+<li>Section (further office hours): 2.30 - 3.20pm every Friday (Bass B312)</li>
+</ul>
+<h2 id="preliminaries">0. Preliminaries</h2>
+<p>The will be <strong>two</strong> revision sessions next week, on top of the usual office hour and section. These are additional opportunities to come to me with any questions about the course. I will not be able to answer very specific questions about the take-home final.</p>
+<p>These will be Wednesday and Thursday afternoon 4.30-6.30pm in Bass B312.</p>
+<h2 id="panel-data">1. Panel data</h2>
+<p>Up until now, most of the data we have seen has been <strong>cross-sectional</strong>. This means that there has typically been no time dimension.</p>
+<p>With panel data, we observe multiple units for multiple periods.</p>
+<p>This extends the family of methods we can use.</p>
+<p>Other types of data are <strong>repeated cross section</strong> in which we have multiple time periods but do not observe the same individuals in each period, and <strong>time series</strong> in which we have a single unit and multiple time periods.</p>
+<h2 id="wide-and-long-data">2. Wide and long data</h2>
+<p>Panel data can be stored in two forms.</p>
+<p><strong>Wide</strong> gives each unit (individual, firm, school) a row in the data. The variables then refer to a particular characteristic in a particular period.</p>
+<p>For example, lets assume we observe the wages for a group of individuals for two periods. The data in <strong>wide</strong> form will look something like:</p>
+<figure>
+<img src="data:image/png;base64,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" style="width:50.0%" alt /><figcaption>Wide data</figcaption>
+</figure>
+<p>This is saying that the wage for individual 1 is 10 in period 1 and 12 in period 2.</p>
+<p>The data can also be represented in <strong>long</strong> format as follows:</p>
+<figure>
+<img src="data:image/png;base64,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" style="width:50.0%" alt /><figcaption>Long data</figcaption>
+</figure>
+<p>Here, each unit-time observation gets its own row.</p>
+<p>Whether or not you want the data in wide or long data will depend on what you want to do with it.</p>
+<p>In the problem set, you start with <strong>wide</strong> data but the analysis is easier done on <strong>long</strong> data.</p>
+<p>Given this, you will have to use the <code>reshape</code> command to put the data into the correct format for analysis</p>
+<p>In the above example, if I wanted to turn the long data into wide data, I write:</p>
+<pre><code>reshape wide wage, i(id) j(t)</code></pre>
+<p>If I wanted to turn the wide data into long data, I write:</p>
+<pre><code>reshape long wage, i(id) j(t)</code></pre>
+<p>Reshaping data can be a bit fiddly. If stuck, I suggest you read the documentation carefully.</p>
+<h2 id="difference-in-differences">3. Difference-in-differences</h2>
+<h3 id="intro">3.1 Intro</h3>
+<p>Perhaps the most common case when one uses panel or repeated cross-sectional data in applied econometrics is a difference-in-difference (DiD) design.</p>
+<p>I will illustrate how to apply DiD through an example.</p>
+<p>Lets consider the question of whether the US should welcome refugees. One argument used against this is that doing so will negatively affect employment rates of natives.</p>
+<p>Lets assume that we have individual-level data on the employment of 1,000 individuals in two states, Washington and Oregon. Let us also imagine that in 2016, Washington invited large numbers of refugees to settle in the state, whereas Oregon refused to accept any refugees. We have data from 2015 (before the policy) and 2017 (after the policy).</p>
+<p>Intuitively, we might expect to learn something by comparing employment in Washington and Oregon after the policy has been introduced. This is clearly flawed, as Washington and Oregon might have different employment levels for any number of reasons. It is easy to think of omitted variables which would bias such an analysis.</p>
+<p>As we have data from before the policy, we can in fact to much better than that. We can compare <strong>changes</strong> in employment between Washington and Oregon. This means that any time-constant differences in employment rates will be eliminated, potentially giving a cleaner comparison and a more credible causal estimate.</p>
+<p>By taking out time-constant differences, we can more plausible identify the causal effect of Washington’s choice to let in the refugees.</p>
+<h3 id="set-up-simulated-data">3.2 Set up simulated data</h3>
+<p>Here I simulate some data.</p>
+<pre class='stata'>. set seed 123
+
+. set obs 2000
+number of observations (_N) was 0, now 2,000
+
+. // state names
+. gen state_name = "Oregon"
+
+. replace state_name = "Washington" if _n >= 1001
+variable state_name was str6 now str10
+(1,000 real changes made)
+
+. encode state_name, gen(state)
+
+. // time
+. gen t = 2015
+
+. replace t = 2017 if state == 1 &amp; _n >= 501
+(500 real changes made)
+
+. replace t = 2017 if state == 2 &amp; _n >= 1501
+(500 real changes made)
+
+. // simulate employment
+. gen cut = 0.7
+
+. replace cut = 0.8 if state == 1 &amp; t == 2017
+(500 real changes made)
+
+. replace cut = 0.5 if state == 2 &amp; t == 2015
+(500 real changes made)
+
+. replace cut = 0.7 if state == 2 &amp; t == 2017
+(0 real changes made)
+
+. gen runif = runiform(0,1)
+
+. gen employed = 0
+
+. replace employed = 1 if runif &lt;= cut
+(1,361 real changes made)
+</pre>
+<h3 id="analysis">3.3 Analysis</h3>
+<p>In my dataset I have three variables. The first is an indicator for whether or not an individual works (<code>employed</code>). The second is a dummy indicating the individual’s state (<code>state</code>). The third (<code>t</code>) represents the year. Recall that we have data for 2015 and 2017, and that the policy was introduced in 2016.</p>
+<p>A basic DiD estimate can be calculated just by calculating averages of employment rates in each state and in each period. These are the averages for Oregon:</p>
+<pre class='stata'>. sum employed if t == 2015 &amp; state == 1
+
+    Variable │        Obs        Mean    Std. Dev.       Min        Max
+─────────────┼─────────────────────────────────────────────────────────
+    employed │        500        .694    .4612912          0          1
+
+. sum employed if t == 2017 &amp; state == 1
+
+    Variable │        Obs        Mean    Std. Dev.       Min        Max
+─────────────┼─────────────────────────────────────────────────────────
+    employed │        500        .792    .4062833          0          1
+</pre>
+<p>These are the averages for Washington:</p>
+<pre class='stata'>. sum employed if t == 2015 &amp; state == 2
+
+    Variable │        Obs        Mean    Std. Dev.       Min        Max
+─────────────┼─────────────────────────────────────────────────────────
+    employed │        500         .48    .5001002          0          1
+
+. sum employed if t == 2017 &amp; state == 2
+
+    Variable │        Obs        Mean    Std. Dev.       Min        Max
+─────────────┼─────────────────────────────────────────────────────────
+    employed │        500        .756    .4299229          0          1
+</pre>
+<p>The change over time for Oregon is 0.792 - 0.694 = 0.098.</p>
+<p>The change over time for Washington is 0.756 - 0.48 = 0.276.</p>
+<p>The difference between the two is 0.178. This is our difference-in-difference estimate.</p>
+<p>The DiD method can also be implemented by running a regression. This allows the addition of control variables and gives easy calculation of standard errors. For the problem set, I would recommend using this method.</p>
+<p>The equivalent regression is of employment on state dummies, a pre/post year dummy and an interaction between the two:</p>
+<pre class='stata'>. reg employed i.state##i.t
+
+      Source │       SS           df       MS      Number of obs   =     2,000
+─────────────┼──────────────────────────────────   F(3, 1996)      =     48.00
+       Model │     29.2575         3      9.7525   Prob > F        =    0.0000
+    Residual │     405.582     1,996  .203197395   R-squared       =    0.0673
+─────────────┼──────────────────────────────────   Adj R-squared   =    0.0659
+       Total │    434.8395     1,999  .217528514   Root MSE        =    .45077
+
+─────────────┬────────────────────────────────────────────────────────────────
+    employed │      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+─────────────┼────────────────────────────────────────────────────────────────
+       state │
+ Washington  │      -.214   .0285095    -7.51   0.000    -.2699114   -.1580886
+             │
+           t │
+       2017  │       .098   .0285095     3.44   0.001     .0420886    .1539114
+             │
+     state#t │
+ Washington #│
+       2017  │       .178   .0403185     4.41   0.000     .0989293    .2570707
+             │
+       _cons │       .694   .0201592    34.43   0.000     .6544647    .7335353
+─────────────┴────────────────────────────────────────────────────────────────
+</pre>
+<p>The constant gives the employment rate when all dummies are switched to 0. In this case, this is the employment rate of Oregon in 2015.</p>
+<p>The interpretation of the coefficients is all in relation to this constant.</p>
+<p>The interpretation of the coefficients is as follows:</p>
+<ul>
+<li><p>The first coefficient gives the difference in employment rates between Washington and Oregon in 2015. We see that Washington had a lower employment rate in this year.</p></li>
+<li><p>The second gives the change in employment rates between 2015 and 2017 for Oregon. We see that employment in Oregon increased over this period.</p></li>
+<li><p>The third gives the difference between the change in employment rates between 2015 and 2017 for Oregon and the change in employment rates between 2015 and 2017 for Washington.</p></li>
+</ul>
+<p>Our DiD estimate is 0.178 and is highly significant.</p>
+<p>We estimate that employment rates increased by 17.8 pp more in Washington between 2015 and 2017 than they did in Oregon for the same period.</p>
+<p>Under certain assumptions, we estimate the effect of Washington’s policy of letting in refugees to be a 17.8 pp increase in employment rates.</p>
+<h3 id="credibility">3.4 Credibility</h3>
+<p>The first crucial assumption behind DiD is <strong>common trends</strong>. The trends in the treatment and the control group outcomes in the absence of the policy must have been the same.</p>
+<p>What could violate this?</p>
+<ul>
+<li>Any other policy difference between Oregon and Washington which affected employment rates and are not reflected in 2015 employment rates, for example any other state-level policy introduced in 2016.</li>
+</ul>
+<p>We also require the stable unit treatment value assumption (SUTVA). In fact this is true of all the methods we have used, but is particularly important in this example. This states that the policy being introduced in Washington didn’t affect Oregon’s outcomes.</p>
+<p>Is this plausible? We might think that migration may violate this. If individuals move away from Washington in response to the policy and settle in Oregon, Oregon’s employment rate could be directly affected by the policy.</p>
+</body>
+</html>

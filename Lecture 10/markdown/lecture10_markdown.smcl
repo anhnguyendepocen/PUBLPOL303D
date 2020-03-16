@@ -1,0 +1,135 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 10/markdown/lecture10_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}10 Mar 2020, 17:54:48
+{txt}
+{com}. //_1
+. cd "~/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 10/markdown/"
+{res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 10/markdown
+{txt}
+{com}. use smoking
+{txt}(Tobacco Sales in 39 US States)
+
+{com}. //_2
+. tsset state year
+{res}{txt}{col 8}panel variable:  {res}state (strongly balanced)
+{txt}{col 9}time variable:  {res}{col 25}year, 1970 to 2000
+{txt}{col 17}delta:  {res}1 unit
+{txt}
+{com}. //_3
+. synth cigsale beer(1984(1)1988) lnincome retprice age15to24 cigsale(1988) ///
+> cigsale(1980) cigsale(1975), trunit(3) trperiod(1989) figure
+{txt}{hline}
+{res}Synthetic Control Method for Comparative Case Studies
+{txt}{hline}
+
+{res}First Step: Data Setup
+{txt}{hline}
+{com}control units: for 38 of out 38 units missing obs for predictor lnincome in period 1970 -ignored for averaging
+control units: for 38 of out 38 units missing obs for predictor lnincome in period 1971 -ignored for averaging
+treated unit: for 1 of out 1 units missing obs for predictor lnincome in period 1970 -ignored for averaging
+treated unit: for 1 of out 1 units missing obs for predictor lnincome in period 1971 -ignored for averaging
+{txt}{hline}
+Data Setup successful
+{hline}
+{txt}{p 16 28 0} Treated Unit: {res}California {p_end}
+{txt}{p 15 30 0} Control Units: {res}Alabama, Arkansas, Colorado, Connecticut, Delaware, Georgia, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Mexico, North Carolina, North Dakota, Ohio, Oklahoma, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, West Virginia, Wisconsin, Wyoming {p_end}
+{txt}{hline}
+{txt}{p 10 30 0} Dependent Variable: {res}cigsale {p_end}
+{txt}{p 2 30 0} MSPE minimized for periods: {res}1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988{p_end}
+{txt}{p 0 30 0} Results obtained for periods: {res}1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000{p_end}
+{txt}{hline}
+{txt}{p 18 30 0} Predictors:{res} beer(1984(1)1988) lnincome retprice age15to24 cigsale(1988) cigsale(1980) cigsale(1975){p_end}
+{txt}{hline}
+{txt}{p 0 30 0} Unless period is specified {p_end}
+{txt}{p 0 30 0} predictors are averaged over: {res}1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988{p_end}
+{txt}{hline}
+
+{res}Second Step: Run Optimization
+{txt}{hline}
+{res}{txt}{hline}
+{res}Optimization done
+{txt}{hline}
+
+{res}Third Step: Obtain Results
+{txt}{hline}
+{res}Loss: Root Mean Squared Prediction Error
+
+{txt}{space 0}{hline 9}{c  TT}{hline 11}
+{space 0}{space 0}{ralign 8:RMSPE}{space 1}{c |}{space 1}{ralign 9:{res:{sf: 1.943233}}}{space 1}
+{space 0}{hline 9}{c  BT}{hline 11}
+{hline}
+{res}Unit Weights:
+
+{txt}{hline 15}{c TT}{hline 12}
+         Co_No {c |} Unit_Weight
+{hline 15}{c +}{hline 12}
+       Alabama {c |}           {res}0
+      {txt}Arkansas {c |}           {res}0
+      {txt}Colorado {c |}        {res}.285
+   {txt}Connecticut {c |}        {res}.101
+      {txt}Delaware {c |}           {res}0
+       {txt}Georgia {c |}           {res}0
+         {txt}Idaho {c |}           {res}0
+      {txt}Illinois {c |}           {res}0
+       {txt}Indiana {c |}           {res}0
+          {txt}Iowa {c |}           {res}0
+        {txt}Kansas {c |}           {res}0
+      {txt}Kentucky {c |}           {res}0
+     {txt}Louisiana {c |}           {res}0
+         {txt}Maine {c |}           {res}0
+     {txt}Minnesota {c |}           {res}0
+   {txt}Mississippi {c |}           {res}0
+      {txt}Missouri {c |}           {res}0
+       {txt}Montana {c |}           {res}0
+      {txt}Nebraska {c |}           {res}0
+        {txt}Nevada {c |}        {res}.245
+ {txt}New Hampshire {c |}           {res}0
+    {txt}New Mexico {c |}           {res}0
+{txt}North Carolina {c |}           {res}0
+  {txt}North Dakota {c |}           {res}0
+          {txt}Ohio {c |}           {res}0
+      {txt}Oklahoma {c |}           {res}0
+  {txt}Pennsylvania {c |}           {res}0
+  {txt}Rhode Island {c |}           {res}0
+{txt}South Carolina {c |}           {res}0
+  {txt}South Dakota {c |}           {res}0
+     {txt}Tennessee {c |}           {res}0
+         {txt}Texas {c |}           {res}0
+          {txt}Utah {c |}        {res}.369
+       {txt}Vermont {c |}           {res}0
+      {txt}Virginia {c |}           {res}0
+ {txt}West Virginia {c |}           {res}0
+     {txt}Wisconsin {c |}           {res}0
+       {txt}Wyoming {c |}           {res}0
+{txt}{hline 15}{c BT}{hline 12}
+{hline}
+{res}Predictor Balance:
+
+{txt}{space 0}{hline 31}{c  TT}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 30:}{space 1}{c |}{space 1}{ralign 9:Treated}{space 1}{space 1}{ralign 9:Synthetic}{space 1}
+{space 0}{hline 31}{c   +}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 30:beer(1984(1)1988)}{space 1}{c |}{space 1}{ralign 9:{res:{sf:    24.28}}}{space 1}{space 1}{ralign 9:{res:{sf: 23.22596}}}{space 1}
+{space 0}{space 0}{ralign 30:lnincome}{space 1}{c |}{space 1}{ralign 9:{res:{sf: 10.03176}}}{space 1}{space 1}{ralign 9:{res:{sf: 9.867266}}}{space 1}
+{space 0}{space 0}{ralign 30:retprice}{space 1}{c |}{space 1}{ralign 9:{res:{sf: 66.63684}}}{space 1}{space 1}{ralign 9:{res:{sf: 65.40743}}}{space 1}
+{space 0}{space 0}{ralign 30:age15to24}{space 1}{c |}{space 1}{ralign 9:{res:{sf: .1786624}}}{space 1}{space 1}{ralign 9:{res:{sf: .1825559}}}{space 1}
+{space 0}{space 0}{ralign 30:cigsale(1988)}{space 1}{c |}{space 1}{ralign 9:{res:{sf:     90.1}}}{space 1}{space 1}{ralign 9:{res:{sf:  92.6063}}}{space 1}
+{space 0}{space 0}{ralign 30:cigsale(1980)}{space 1}{c |}{space 1}{ralign 9:{res:{sf:    120.2}}}{space 1}{space 1}{ralign 9:{res:{sf: 120.3907}}}{space 1}
+{space 0}{space 0}{ralign 30:cigsale(1975)}{space 1}{c |}{space 1}{ralign 9:{res:{sf:    127.1}}}{space 1}{space 1}{ralign 9:{res:{sf: 126.7094}}}{space 1}
+{space 0}{hline 31}{c  BT}{hline 11}{hline 11}
+{hline}
+{res}{txt}
+{com}. graph export "fig.png", replace
+{txt}(file fig.png written in PNG format)
+
+{com}. //_^
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/jack/Dropbox/Documents/Teaching/PUBLPOL330D/Lectures/Lecture 10/markdown/lecture10_markdown.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}10 Mar 2020, 17:54:53
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
